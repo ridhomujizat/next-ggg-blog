@@ -27,7 +27,7 @@ const LinkItems = [
   { name: "Post", icon: FiTrendingUp, link: "post" },
   { name: "Cateogry", icon: FiCompass, link: "categorys" },
   { name: "Labels", icon: FiCompass, link: "labels" },
-  { name: "users", icon: FiCompass, link: "user" },
+  { name: "User", icon: FiCompass, link: "user" },
   // { name: "Settings", icon: FiSettings, link: "setting" },
 ];
 
@@ -98,7 +98,6 @@ const NavItem = ({ icon, children, link, ...rest }) => {
     return string.split("/")[2];
   };
 
-
   return (
     <Link href={`/admin/${link}`} style={{ textDecoration: "none" }}>
       <a>
@@ -111,7 +110,9 @@ const NavItem = ({ icon, children, link, ...rest }) => {
           borderRadius="xl"
           role="group"
           cursor="pointer"
-          background={link === AtferSlash(`${router.pathname}`) ? "#1C2975" : ""}
+          background={
+            link === AtferSlash(`${router.pathname}`) ? "#1C2975" : ""
+          }
           border="1px"
           borderColor="white"
           _hover={{

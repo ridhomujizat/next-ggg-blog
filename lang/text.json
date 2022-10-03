@@ -4,6 +4,10 @@
       "login": "Login",
       "register": "Register",
       "logout": "Logout"
+    },
+    "footer": {
+      "about": "About",
+      "subcribe": "Subcribe"
     }
   },
   "idn": {
@@ -11,6 +15,10 @@
       "login": "Masuk",
       "register": "Daftar",
       "logout": "Keluar"
+    },
+    "footer": {
+      "about": "Tentang Kami",
+      "subcribe": "Langganan"
     }
   }
 }

@@ -1,12 +1,21 @@
 import callAPI from "config/callAPI";
 
 export const serviceLogin = async (data) => {
-    const url = `/api/users/login`;
-  
-    return callAPI({
-      url,
-      method: 'POST',
-      data,
-    });
-  };
-  
+  const url = `/api/users/login`;
+
+  return callAPI({
+    url,
+    method: "POST",
+    data,
+  });
+};
+
+export const serviceRegister = async (data) => {
+  const url = `/api/users/register`;
+
+  return callAPI({
+    url,
+    method: "POST",
+    data,
+  });
+};
