@@ -1,0 +1,154 @@
+import { useEffect, useState } from "react";
+import AdminLayout from "layout/AdminLayout";
+import generateLang from "lang";
+import Table from "components/Table";
+import {
+  IconButton,
+  Stack,
+  Box,
+  Flex,
+  Text,
+  Button,
+  HStack,
+  useToast
+} from "@chakra-ui/react";
+import Link from "next/link";
+import ModalDeleteItem from "components/Modal/ModalDeleteItem";
+import { getLabels, deleteLabels } from "service/labels";
+import { MdOutlineEdit, MdDeleteOutline } from "react-icons/md";
+export default function Post(props) {
+  const toast = useToast();
+  const [modalDelete, setModalDelete] = useState({ open: false, id: null });
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = async () => {
+    const respon = await getLabels({ type: props.currentLang });
+    if (!respon.error) {
+      setData(respon.data);
+    }
+  };
+  const handleDelete = async () => {
+    const respon = await deleteLabels({ id: modalDelete.id });
+    if (!respon.error) {
+      toast({
+        position: "bottom-right",
+        title: "Label deleted.",
+        description: "Success delete label.",
+        status: "success",
+        duration: 6000,
+        isClosable: true,
+      });
+      getData()
+      setModalDelete({open: false, id: null})
+    } else {
+      toast({
+        position: "bottom-right",
+        title: "Failed to delete Label.",
+        description: respon?.message ? respon?.message : "-",
+        status: "error",
+        duration: 6000,
+        isClosable: true,
+      });
+      setLoading(false);
+    }
+  };
+
+  const headCell = [
+    {
+      id: "label_name",
+      label: "Name",
+      align: "left",
+    },
+    {
+      id: "label_description",
+      label: "Description",
+      align: "left",
+    },
+    {
+      id: "action",
+      label: "Action",
+      align: "center",
+      format: (val) => {
+        return (
+          <HStack spacing={4} justifyContent="center">
+            <Link href={`/admin/labels/form/${val.id}`}>
+              <IconButton
+                aria-label="Search database"
+                icon={<MdOutlineEdit />}
+                colorScheme="linkedin"
+              />
+            </Link>
+
+            <IconButton
+              aria-label="Search database"
+              icon={<MdDeleteOutline />}
+              colorScheme="red"
+              onClick={() => setModalDelete({ open: true, id: val.id })}
+            />
+          </HStack>
+        );
+      },
+    },
+  ];
+
+  return (
+    <AdminLayout currentLang={props.currentLang} text={props.text}>
+      <Stack spacing={4}>
+        <Flex
+          flexDirection="row"
+          alignItems="center"
+          justifyContent="space-between"
+          flexWrap="wrap"
+        >
+          <Box>
+            <Flex flexDirection="row" alignItems="center">
+              <Text fontSize="4xl" fontWeight="bold" mr="10px">
+                Labels
+              </Text>
+              <Link href="/admin/labels/form">
+                <Button
+                  borderWidth={1}
+                  borderColor="#FFFFFF80"
+                  background="transparent"
+                  h="37px"
+                  w="154px"
+                >
+                  Add New
+                </Button>
+              </Link>
+            </Flex>
+          </Box>
+        </Flex>
+        <Table headCell={headCell} data={data} />
+      </Stack>
+      <ModalDeleteItem
+        open={modalDelete.open}
+        item="label"
+        onClose={() => setModalDelete(false)}
+        onDelete={handleDelete}
+      />
+    </AdminLayout>
+  );
+}
+
+export async function getServerSideProps({ req }) {
+  const { lang, token } = req.cookies;
+  if (!token) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+  const initialLang = generateLang(lang);
+
+  return {
+    props: {
+      ...initialLang,
+    },
+  };
+}
