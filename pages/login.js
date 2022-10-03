@@ -12,6 +12,7 @@ import {
   Spacer,
   Stack,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import Image from "next/image";
 import React, { useState } from "react";
@@ -22,6 +23,7 @@ import useAuthStore from "store/authStore";
 import Cookies from "js-cookie";
 
 function Login() {
+  const toast = useToast()
   const router = useRouter();
   const storeAuth = useAuthStore((state) => state);
   const [email, setEmail] = useState("");
@@ -29,6 +31,16 @@ function Login() {
 
   const handleSubmit = async () => {
     const respon = await serviceLogin({ email, password });
+    if (respon.error) {
+      return toast({
+        position: "bottom-right",
+        title: "Failed to Login.",
+        description: respon?.message ? respon?.message : "-",
+        status: "error",
+        duration: 6000,
+        isClosable: true,
+      });
+    }
     Cookies.set("token", respon.data.token, { expires: 2 });
     await storeAuth.setLogin(respon.data);
     router.push("/admin/post");
@@ -151,7 +163,6 @@ export async function getServerSideProps({ req }) {
       },
     };
   }
-
 
   return {
     props: {},
