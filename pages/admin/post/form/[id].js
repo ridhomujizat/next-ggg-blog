@@ -80,7 +80,7 @@ export default function Form(props) {
       // delete value.image;
 
       value.slug_en = value.title_en.split(" ").join("-");
-      value.slug_idn = value.title_idn.split(" ").join("-");
+      value.slug_idn = value.title_en.split(" ").join("-");
 
       // return console.log(value)
       const respon = await updateBlog({
@@ -97,7 +97,7 @@ export default function Form(props) {
         toast({
           position: "bottom-right",
           title: "Blog updated.",
-          description: "Blog has been created.",
+          description: "Blog has been updated.",
           status: "success",
           duration: 6000,
           isClosable: true,

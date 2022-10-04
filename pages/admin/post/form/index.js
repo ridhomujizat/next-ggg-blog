@@ -29,6 +29,7 @@ const CustomEditor = dynamic(() => import("components/RichEditor"), {
   ssr: false,
 });
 
+
 // const edjsParser = dynamic(() => import("editorjs-html"), {
 //   ssr: false,
 // });
@@ -80,7 +81,7 @@ export default function Form(props) {
       }
 
       value.slug_en = value.title_en.split(" ").join("-")
-      value.slug_idn = value.title_idn.split(" ").join("-")
+      value.slug_idn = value.title_en.split(" ").join("-")
 
       // return console.log(value)
 console.log(moment().format("YYYY-MM-DD"))

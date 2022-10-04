@@ -21,9 +21,6 @@ import { BiMailSend } from "react-icons/bi";
 import logo from "assets/logo-ggg.png";
 import Image from "next/image";
 
-import useLangStore from "store/langStore";
-import text from "lang/text.json";
-
 const SocialButton = ({ children, label, href }) => {
   return (
     <chakra.button
@@ -58,8 +55,7 @@ const ListHeader = ({ children }) => {
   );
 };
 
-export default function Footer() {
-  const lang = useLangStore((state) => state.lang);
+export default function Footer({ text }) {
   return (
     <Box borderTop="1.5px solid #0024FF" background="#0C0E17">
       <Container as={Stack} maxW="container.xl" py={5} background="#0C0E17">
@@ -93,7 +89,7 @@ export default function Footer() {
             </Stack>
           </Stack>
           <Stack align={"flex-start"}>
-            <ListHeader>{text[lang].footer.about}</ListHeader>
+            <ListHeader>{text.about}</ListHeader>
             <Link href={"#"} fontWeight={"700"}>
               Blog
             </Link>
@@ -102,7 +98,7 @@ export default function Footer() {
             </Link>
           </Stack>
           <Stack>
-            <ListHeader>{text[lang].footer.subscribe}</ListHeader>
+            <ListHeader>{text.subscribe}</ListHeader>
             <InputGroup borderRadius="10px">
               <Input
                 background="#D9D9D9"

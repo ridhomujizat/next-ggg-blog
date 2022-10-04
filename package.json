@@ -17,6 +17,7 @@
     "@emotion/styled": "^11",
     "axios": "^0.27.2",
     "editorjs-html": "^3.4.2",
+    "editorjs-react-renderer": "^3.4.0",
     "editorjs-style": "^3.0.3",
     "editorjs-tooltip": "^1.1.8",
     "formik": "^2.2.9",

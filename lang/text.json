@@ -8,6 +8,12 @@
     "footer": {
       "about": "About",
       "subcribe": "Subcribe"
+    },
+    "home": {
+      "title": "Whats On GGG",
+      "desc": "Our stories, latest updates, and exclusive promos. Find anything you want to know about us.",
+      "categories":"Articles By Category",
+      "share": "Share"
     }
   },
   "idn": {
@@ -19,6 +25,12 @@
     "footer": {
       "about": "Tentang Kami",
       "subcribe": "Langganan"
+    },
+    "home": {
+      "title": "Ada Apa di GGG",
+      "desc": "Cerita kami, update terbaru, dan promo eksklusif. Temukan apa pun yang ingin Anda ketahui tentang kami.",
+      "categories":"Artikel Berdasarkan Kategori",
+      "share": "Bagikan"
     }
   }
 }

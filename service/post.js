@@ -1,12 +1,20 @@
 import callAPI from "config/callAPI";
 const CURRENT_API = "blogs";
 
-export const getBlogs = async ({ type }) => {
+export const getBlogs = async ({ type, limit, page }) => {
   const url = `/api/${CURRENT_API}`;
   let params = {};
 
   if (type) {
     params = { type };
+  }
+
+  if (limit) {
+    params = { ...params, limit };
+  }
+
+  if (page) {
+    params = { ...params, page };
   }
 
   return callAPI({
@@ -31,6 +39,22 @@ export const getDetailBlog= async ({ id, data, type }) => {
     data,
     params,
     token: true
+  });
+};
+
+export const getDetailBySlugBlog = async ({ id, type }) => {
+  const url = `/api/${CURRENT_API}/${id}`;
+
+  let params = {};
+
+  if (type) {
+    params = { type };
+  }
+
+  return callAPI({
+    url,
+    method: "GET",
+    params,
   });
 };
 
