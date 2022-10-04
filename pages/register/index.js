@@ -16,7 +16,6 @@ import Image from "next/image";
 import React, { useState } from "react";
 import logo from "assets/logo-ggg-black.png";
 import Link from "next/link";
-import Footer from "components/section/Footer";
 import Router from "next/router";
 import { serviceRegister } from "service/auth";
 
@@ -158,12 +157,11 @@ function Register() {
             </Center>
           </Box>
         </Stack>
-        <Box display={["block", "none"]}>
-          <Footer />
-        </Box>
+
       </Flex>
     </Box>
   );
 }
+
 
 export default Register;
