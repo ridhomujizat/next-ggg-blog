@@ -4,6 +4,7 @@ import NextLink from "next/link";
 import generateLang from "lang";
 import PageLayouts from "layout/PagesLayout";
 import Thumbnail from "components/Thumbnail";
+import Cateogries from "components/section/Cateogries";
 import {
   Container,
   Box,
@@ -18,6 +19,8 @@ import {
 } from "@chakra-ui/react";
 import { BsSearch } from "react-icons/bs";
 import { getBlogs } from "service/post";
+import { getCategorys } from "service/category";
+import { getLabels } from "service/labels";
 import moment from "moment";
 
 export default function Home(props) {
@@ -152,6 +155,7 @@ export default function Home(props) {
             {/* <NextLink href="/?page=2">
               <h1>asdas</h1>
             </NextLink> */}
+            <Cateogries categories={props.categories} labels={props.labels} text={props.text.home} />
           </Stack>
         </Stack>
       </PageLayouts>
@@ -176,6 +180,12 @@ export async function getServerSideProps({ req, query }) {
     limit,
     page,
   });
+  const responseCat = await getCategorys({
+    type: initialLang.currentLang,
+  });
+  const responseLabel = await getLabels({
+    type: initialLang.currentLang,
+  });
 
   return {
     props: {
@@ -184,6 +194,8 @@ export async function getServerSideProps({ req, query }) {
       limit,
       // stickyBlog,
       BlogList: respon.data,
+      categories: responseCat.data,
+      labels: responseLabel.data,
     },
   };
 }
