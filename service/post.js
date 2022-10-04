@@ -16,8 +16,8 @@ export const getBlogs = async ({ type }) => {
   });
 };
 
-export const getDetailCategory = async ({ id, data, type }) => {
-  const url = `/api/${CURRENT_API}/${id}`;
+export const getDetailBlog= async ({ id, data, type }) => {
+  const url = `/api/${CURRENT_API}/detail/${id}`;
 
   let params = {};
 
@@ -30,10 +30,11 @@ export const getDetailCategory = async ({ id, data, type }) => {
     method: "GET",
     data,
     params,
+    token: true
   });
 };
 
-export const postCategory = async (data) => {
+export const postBlog= async (data) => {
   const url = `/api/${CURRENT_API}/create`;
 
   return callAPI({
@@ -44,7 +45,7 @@ export const postCategory = async (data) => {
   });
 };
 
-export const deleteCategory = async ({ id, data }) => {
+export const deleteBlog= async ({ id, data }) => {
   const url = `/api/${CURRENT_API}/${id}`;
 
   return callAPI({
@@ -55,7 +56,7 @@ export const deleteCategory = async ({ id, data }) => {
   });
 };
 
-export const updateCategory = async ({ id, data }) => {
+export const updateBlog= async ({ id, data }) => {
   const url = `/api/${CURRENT_API}/${id}`;
 
   return callAPI({
@@ -77,7 +78,7 @@ export const uploadImageBlog = async (data) => {
   });
 };
 
-export const deleteImageCategory = async (data) => {
+export const deleteImageBlog= async (data) => {
   const url = `/api/images/${CURRENT_API}/upload`;
 
   return callAPI({

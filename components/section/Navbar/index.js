@@ -4,22 +4,18 @@ import Image from "next/image";
 import { Container, Box, Button, Text, Link } from "@chakra-ui/react";
 import Cookies from "js-cookie";
 import useAuthStore from "store/authStore";
-import generateLang from "lang";
 
 import logo from "assets/logo-ggg.png";
 const langList = ["en", "idn"];
 
 export default function Navbar({ currentLang, text }) {
   const router = useRouter();
-  // const { isLogin, user, setLogout } = useAuthStore((state) => state);
-  const isLogin = useAuthStore.getState().isLogin;
-  const user = useAuthStore.getState().user;
-  const setLogout = useAuthStore.getState().setLogout;
-  // const [auth, setAuth] = useState({ isLogin: isLogin, user: user });
+  const { isLogin, user, setLogout } = useAuthStore((state) => state);
+  const [auth, setAuth] = useState({ isLogin: false, user: null });
 
-  // useEffect(() => {
-  //   setAuth({ isLogin, user });
-  // }, []);
+  useEffect(() => {
+    setAuth({ isLogin, user });
+  }, []);
 
   const changeLang = (value) => {
     Cookies.set("lang", value);
@@ -53,20 +49,20 @@ export default function Navbar({ currentLang, text }) {
           </Link>
 
           <Box sx={sx.nav}>
-            {isLogin ? (
+            {auth.isLogin ? (
               <>
-                <Text fontWeight="bold">Hi, {user.username}</Text>
+                <Text fontWeight="bold">Hi, {auth.user.username}</Text>
                 <Button variant="outline" onClick={handleLogout}>
-                  {/* {text.logout} */}
+                  {text.logout}
                 </Button>
               </>
             ) : (
               <>
                 <Link href="/login">
-                  {/* <Button variant="outline">{text.login}</Button> */}
+                  <Button variant="outline">{text.login}</Button>
                 </Link>
                 <Link href="/register">
-                  {/* <Button variant="outline">{text.register}</Button> */}
+                  <Button variant="outline">{text.register}</Button>
                 </Link>
               </>
             )}
@@ -93,17 +89,6 @@ export default function Navbar({ currentLang, text }) {
       </Container>
     </Box>
   );
-}
-
-export async function getServerSideProps({ req }) {
-  const { lang } = req.cookies;
-  const initialLang = generateLang(lang);
-
-  return {
-    props: {
-      ...initialLang,
-    },
-  };
 }
 
 const sx = {

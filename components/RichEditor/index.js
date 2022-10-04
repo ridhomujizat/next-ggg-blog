@@ -34,7 +34,7 @@ const CustomEditor = (props) => {
   const { setContent, content } = props;
   const EDITTOR_HOLDER_ID = `editorjs${props.id ?? ""}`;
 
-  const isInstance = useRef();
+  const isInstance = useRef(null);
 
   /////////////////////////////////////////////////////////////////////////
   useEffect(() => {

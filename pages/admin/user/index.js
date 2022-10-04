@@ -16,7 +16,7 @@ import Sidebar from "components/section/Sidebar";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import img_empty from "/assets/img_empty.png";
-import { useSession } from "next-auth/react";
+// import { useSession } from "next-auth/react";
 import Router from "next/router";
 import generateLang from "lang";
 import useAuthStore from "store/authStore";

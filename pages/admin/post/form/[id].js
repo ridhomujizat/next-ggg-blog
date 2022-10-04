@@ -21,7 +21,7 @@ import {
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { postBlog, uploadImageBlog } from "service/post";
+import { getDetailBlog, updateBlog, uploadImageBlog } from "service/post";
 import edjsHTML from "editorjs-html";
 import moment from "moment";
 import useAuthStore from "store/authStore";
@@ -33,68 +33,70 @@ const CustomEditor = dynamic(() => import("components/RichEditor"), {
 //   ssr: false,
 // });
 
+const value = {
+  title_idn: "",
+  title_en: "",
+  content_idn: null,
+  content_en: null,
+  slug_idn: "",
+  slug_en: "",
+  author: "admin",
+  stick_to_front: false,
+  image_url: "",
+  meta_description_idn: "",
+  meta_description_en: "",
+  date: Date.now(),
+  category_id: 1,
+  array_id_labels: "1;2",
+};
+
 export default function Form(props) {
   const stateAuth = useAuthStore((state) => state);
   const [type, setType] = useState("en");
   const [auth, setAuth] = useState(null);
   const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    setAuth(stateAuth.user);
-  }, []);
-
+  const [initialValue, setIntialValue] = useState(value);
   const toast = useToast();
   const route = useRouter();
+  const { id } = route.query;
   const formik = useFormik({
-    initialValues: {
-      title_idn: "",
-      title_en: "",
-      content_idn: "",
-      content_en: "",
-      slug_idn: "",
-      slug_en: "",
-      author: "admin",
-      stick_to_front: false,
-      image_url: "",
-      image: null,
-      meta_description_idn: "",
-      meta_description_en: "",
-      date: Date.now(),
-      category_id: 1,
-      array_id_labels: "1;2",
-    },
+    initialValues: initialValue,
     onSubmit: async (value) => {
+      setLoading(true);
 
+      if (value.image) {
+        const f = new FormData();
+        f.append("photo", value.image[0]);
+
+        const responImage = await uploadImageCategory(f);
+        delete value.image;
+        value.image_url = responImage.image_url;
+      }
       // return console.log(value);
       // const edjsParser = edjsHTML();
       // let html = edjsParser.parse(JSON.parse(value.content_en));
       // return console.log(html);
-      setLoading(true);
       // HANDLE IMAGE UPLOAD
-      const f = new FormData();
-      f.append("photo", value.image[0]);
-
-      const responImage = await uploadImageBlog(f);
       // delete value.image;
-      if(!responImage.error){
-        value.image_url = responImage.image_url
-      }
 
-      value.slug_en = value.title_en.split(" ").join("-")
-      value.slug_idn = value.title_idn.split(" ").join("-")
+      value.slug_en = value.title_en.split(" ").join("-");
+      value.slug_idn = value.title_idn.split(" ").join("-");
 
       // return console.log(value)
-console.log(moment().format("YYYY-MM-DD"))
-      const respon = await postBlog({
-        ...value,
-        date: moment().format("YYYY-MM-DD HH:mm:ss  ")
+      const respon = await updateBlog({
+        id,
+        data: {
+          ...value,
+          // date: moment().format("YYYY-MM-DD HH:mm:ss  "),
+        },
       });
 
       if (!respon.error) {
-      delete value.image;
+        delete value.image;
         route.push("/admin/post");
         toast({
           position: "bottom-right",
-          title: "Blog created.",
+          title: "Blog updated.",
           description: "Blog has been created.",
           status: "success",
           duration: 6000,
@@ -103,7 +105,7 @@ console.log(moment().format("YYYY-MM-DD"))
       } else {
         toast({
           position: "bottom-right",
-          title: "Failed to create blog.",
+          title: "Failed to update blog.",
           description: respon?.message ? respon?.message : "-",
           status: "error",
           duration: 6000,
@@ -121,7 +123,41 @@ console.log(moment().format("YYYY-MM-DD"))
       //     .required("Description is required"),
       //   category_description_en: yup.string().required("Description is required"),
     }),
+    enableReinitialize: true,
   });
+
+  const getCategory = async () => {
+    const responEN = await getDetailBlog({ id, type: "en" });
+    const responIDN = await getDetailBlog({ id, type: "idn" });
+    setIntialValue({
+      ...responEN.data,
+      array_id_labels: responEN.data.array_id_labels
+        .map((val) => val.id)
+        .join(","),
+      CategoryBlog: responEN.data.CategoryBlog.id,
+
+      // title_idn: responIDN.data.title,
+      // title_en: responEN.data.title,
+      // content_idn: responIDN.data.content,
+      // content_en: responEN.data.content,
+      // slug_idn: responIDN.data.slug,
+      // slug_en: responEN.data.slug,
+      // meta_description_idn: responIDN.data.meta_description,
+      // meta_description_en: responEN.data.meta_description,
+    });
+    setTimeout(() => {
+      formik.setFieldValue("content_idn", responIDN.data.content_idn);
+      formik.setFieldValue("content_en", responIDN.data.content_en);
+    }, 6000);
+  };
+
+  useEffect(() => {
+    getCategory();
+  }, []);
+
+  useEffect(() => {
+    setAuth(stateAuth.user);
+  }, []);
 
   return (
     <AdminLayout currentLang={props.currentLang} text={props.text}>
@@ -144,7 +180,7 @@ console.log(moment().format("YYYY-MM-DD"))
               src={
                 formik.values?.image
                   ? URL.createObjectURL(formik.values?.image[0])
-                  : "/image/img_empty.png"
+                  : formik.values?.image_url
               }
               maxH="200px"
               alt="image-category"
@@ -154,7 +190,7 @@ console.log(moment().format("YYYY-MM-DD"))
               accept="image/* "
               type="file"
               name="image"
-              value={formik.values.image?.name}
+              value={formik.values?.image?.name}
               onChange={(e) => {
                 formik.setFieldValue("image", e.target.files);
               }}
@@ -181,7 +217,9 @@ console.log(moment().format("YYYY-MM-DD"))
                   />
                 </Stack>
                 <Stack spacing={2}>
-                  <Text>Meta Description <TextTransform string={type} /></Text>
+                  <Text>
+                    Meta Description <TextTransform string={type} />
+                  </Text>
                   <Textarea
                     placeholder="Meta Description"
                     name="meta_description_en"
@@ -195,15 +233,19 @@ console.log(moment().format("YYYY-MM-DD"))
                   />
                 </Stack>
                 <Stack spacing={2}>
-                  <Text>Content <TextTransform string={type} /></Text>
+                  <Text>
+                    Content <TextTransform string={type} />
+                  </Text>
                   <Stack color="black" bgColor="white">
-                    <CustomEditor
-                      id="en"
-                      content={formik.values.content_en}
-                      setContent={(e) => {
-                        formik.setFieldValue("content_en", e);
-                      }}
-                    />
+                    {formik.values.content_en && (
+                      <CustomEditor
+                        id="en"
+                        content={formik.values.content_en}
+                        setContent={(e) => {
+                          formik.setFieldValue("content_en", e);
+                        }}
+                      />
+                    )}
                   </Stack>
                 </Stack>
               </Stack>
@@ -211,7 +253,10 @@ console.log(moment().format("YYYY-MM-DD"))
             <TabPanel>
               <Stack spacing={4}>
                 <Stack spacing={2}>
-                  <Text>Title<TextTransform string={type} /></Text>
+                  <Text>
+                    Title
+                    <TextTransform string={type} />
+                  </Text>
                   <Input
                     placeholder="Title Content"
                     name="title_idn"
@@ -225,7 +270,10 @@ console.log(moment().format("YYYY-MM-DD"))
                   />
                 </Stack>
                 <Stack spacing={2}>
-                  <Text>Meta Description<TextTransform string={type} /></Text>
+                  <Text>
+                    Meta Description
+                    <TextTransform string={type} />
+                  </Text>
                   <Textarea
                     placeholder="Meta Description"
                     name="meta_description_idn"
@@ -239,15 +287,20 @@ console.log(moment().format("YYYY-MM-DD"))
                   />
                 </Stack>
                 <Stack spacing={2}>
-                  <Text>Content<TextTransform string={type} /></Text>
+                  <Text>
+                    Content
+                    <TextTransform string={type} />
+                  </Text>
                   <Stack color="black" bgColor="white">
-                    <CustomEditor
-                      id="idn"
-                      content={formik.values.content_idn}
-                      setContent={(e) => {
-                        formik.setFieldValue("content_idn", e);
-                      }}
-                    />
+                    {formik.values.content_idn && (
+                      <CustomEditor
+                        id="idn"
+                        content={formik.values.content_idn}
+                        setContent={(e) => {
+                          formik.setFieldValue("content_idn", e);
+                        }}
+                      />
+                    )}
                   </Stack>
                 </Stack>
               </Stack>

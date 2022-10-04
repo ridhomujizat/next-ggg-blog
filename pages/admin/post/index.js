@@ -67,7 +67,7 @@ export default function Post(props) {
       },
     },
     {
-      id: "category_name",
+      id: "title",
       label: "Title",
       align: "left",
     },
@@ -83,7 +83,7 @@ export default function Post(props) {
       format: (val) => {
         return (
           <HStack spacing={4} justifyContent="center">
-            <Link href={`/admin/categorys/form/${val.id}`}>
+            <Link href={`/admin/post/form/${val.id}`}>
               <IconButton
                 aria-label="Search database"
                 icon={<MdOutlineEdit />}
