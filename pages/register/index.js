@@ -11,6 +11,7 @@ import {
   Spacer,
   Stack,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import Image from "next/image";
 import React, { useState } from "react";
@@ -20,6 +21,7 @@ import Router from "next/router";
 import { serviceRegister } from "service/auth";
 
 function Register() {
+  const toast = useToast();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,6 +36,16 @@ function Register() {
       image_url: "",
     });
     console.log("responsee", response);
+    if (response?.error) {
+      return toast({
+        position: "bottom-right",
+        title: "Failed to Register.",
+        description: response?.message ? response?.message : "-",
+        status: "error",
+        duration: 6000,
+        isClosable: true,
+      });
+    }
     if (response.statusCode === 201) {
       Router.replace("/login");
     }
@@ -157,11 +169,9 @@ function Register() {
             </Center>
           </Box>
         </Stack>
-
       </Flex>
     </Box>
   );
 }
-
 
 export default Register;

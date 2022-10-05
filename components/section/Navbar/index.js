@@ -25,7 +25,8 @@ export default function Navbar({ currentLang, text }) {
   const handleLogout = () => {
     Cookies.remove("token");
     setLogout();
-    router.push("/");
+    router.reload(window.location.pathname);
+    // router.push("/");
   };
 
   return (

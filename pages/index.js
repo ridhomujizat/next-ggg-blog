@@ -30,7 +30,7 @@ export default function Home(props) {
   const stickyPost = () => {
     let data = [];
     if (page === 1) {
-      data = props.BlogList.slice(0, 1);
+      data = props.BlogList?.slice(0, 1);
     }
 
     return data;
@@ -39,7 +39,7 @@ export default function Home(props) {
   const firstColum = () => {
     let data = [];
     if (page === 1) {
-      data = props.BlogList.slice(1, 5);
+      data = props.BlogList?.slice(1, 5);
     }
     return data;
   };
@@ -47,7 +47,7 @@ export default function Home(props) {
   const listColumn = () => {
     let data = [];
     if (page === 1) {
-      data = props.BlogList.slice(6, data.length + 1);
+      data = props.BlogList?.slice(6, data.length + 1);
     }
     return data;
   };
@@ -86,7 +86,7 @@ export default function Home(props) {
               </Box>
             </SimpleGrid>
             {/* NOT FOUND LIST BLOG  */}
-            {BlogList.length === 0 && (
+            {BlogList?.length === 0 && (
               <Box
                 textAlign="center"
                 w="100%"
@@ -101,7 +101,7 @@ export default function Home(props) {
             {console.log(stickyPost())}
             <SimpleGrid columns={[1, null, null, 2]} spacing={10}>
               {/* STICKY POST  */}
-              {stickyPost().map((val) => (
+              {stickyPost()?.map((val) => (
                 <NextLink href={`/blog/${val.slug}`} key={val.id}>
                   <Box cursor="pointer">
                     <Box
@@ -126,7 +126,7 @@ export default function Home(props) {
               {/* FRIST GRID  */}
               <Box>
                 <SimpleGrid columns={[1, null, null, 2]} spacing={10}>
-                  {firstColum().map((val, i) => (
+                  {firstColum()?.map((val, i) => (
                     <Thumbnail
                       slug={val.slug}
                       key={String(i)}
@@ -141,7 +141,7 @@ export default function Home(props) {
             {/* Second GRDI */}
 
             <SimpleGrid columns={[1, null, null, 4]} gap={10} mt={20}>
-              {listColumn().map((o, i) => (
+              {listColumn()?.map((o, i) => (
                 <GridItem key={i}>
                   <Thumbnail
                     key={String(i)}
@@ -155,7 +155,11 @@ export default function Home(props) {
             {/* <NextLink href="/?page=2">
               <h1>asdas</h1>
             </NextLink> */}
-            <Cateogries categories={props.categories} labels={props.labels} text={props.text.home} />
+            <Cateogries
+              categories={props.categories}
+              labels={props.labels}
+              text={props.text.home}
+            />
           </Stack>
         </Stack>
       </PageLayouts>

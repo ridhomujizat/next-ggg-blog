@@ -11,7 +11,7 @@ export const serviceLogin = async (data) => {
 };
 
 export const serviceRegister = async (data) => {
-  const url = `/api/users/register`;
+  const url = `/api/users/admin/register`;
 
   return callAPI({
     url,
