@@ -29,7 +29,7 @@ function Register() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const response = await serviceRegister({
-      fullname: "username",
+      fullname: username,
       username: username,
       email: email,
       password: password,
@@ -146,6 +146,7 @@ function Register() {
                         fontSize="sm"
                         color="#1C2975"
                         onClick={() => Router.replace("/login")}
+                        cursor="pointer"
                       >
                         Login here
                       </Text>
