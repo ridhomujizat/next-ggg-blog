@@ -17,6 +17,8 @@ import Link from "next/link";
 import ModalDeleteItem from "components/Modal/ModalDeleteItem";
 import { getBlogs, deleteCategory, deleteImageCategory } from "service/post";
 import { MdOutlineEdit, MdDeleteOutline } from "react-icons/md";
+import jwtDecode from 'jwt-decode';
+
 export default function Post(props) {
   const toast = useToast();
   const [modalDelete, setModalDelete] = useState({ open: false, id: null });
@@ -145,6 +147,7 @@ export default function Post(props) {
 
 export async function getServerSideProps({ req }) {
   const { lang, token } = req.cookies;
+  console.log(jwtDecode(token))
   if (!token) {
     return {
       redirect: {
