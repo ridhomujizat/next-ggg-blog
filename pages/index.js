@@ -26,7 +26,6 @@ import moment from "moment";
 export default function Home(props) {
   const { limit, page, BlogList } = props;
 
-  console.log("current", BlogList);
   const stickyPost = () => {
     let data = [];
     if (page === 1) {
@@ -98,7 +97,6 @@ export default function Home(props) {
                 <Text>no posts yet</Text>
               </Box>
             )}
-            {console.log(stickyPost())}
             <SimpleGrid columns={[1, null, null, 2]} spacing={10}>
               {/* STICKY POST  */}
               {stickyPost().map((val) => (
@@ -187,13 +185,14 @@ export async function getServerSideProps({ req, query }) {
     type: initialLang.currentLang,
   });
 
+  const {blogs} = respon.data
   return {
     props: {
       ...initialLang,
       page,
       limit,
       // stickyBlog,
-      BlogList: respon.data,
+      BlogList: blogs,
       categories: responseCat.data,
       labels: responseLabel.data,
     },
