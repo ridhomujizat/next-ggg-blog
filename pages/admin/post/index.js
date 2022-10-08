@@ -11,13 +11,13 @@ import {
   Button,
   HStack,
   useToast,
-  Image
+  Image,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import ModalDeleteItem from "components/Modal/ModalDeleteItem";
 import { getBlogs, deleteCategory, deleteImageCategory } from "service/post";
 import { MdOutlineEdit, MdDeleteOutline } from "react-icons/md";
-import jwtDecode from 'jwt-decode';
+import jwtDecode from "jwt-decode";
 
 export default function Post(props) {
   const toast = useToast();
@@ -30,7 +30,9 @@ export default function Post(props) {
   const getData = async () => {
     const respon = await getBlogs({ type: props.currentLang });
     if (!respon.error) {
-      setData(respon.data);
+      const { blogs } = respon.data;
+
+      setData(blogs);
     }
   };
   const handleDelete = async () => {
@@ -44,7 +46,7 @@ export default function Post(props) {
         duration: 6000,
         isClosable: true,
       });
-      setModalDelete({open: false, id: null})
+      setModalDelete({ open: false, id: null });
       getData();
     } else {
       toast({
@@ -65,7 +67,14 @@ export default function Post(props) {
       label: "Image",
       align: "center",
       format: (val) => {
-        return <Image src={val.image_url} alt={val.category_name} maxW="200px" margin="auto" />
+        return (
+          <Image
+            src={val.image_url}
+            alt={val.category_name}
+            maxW="200px"
+            margin="auto"
+          />
+        );
       },
     },
     {
@@ -147,7 +156,7 @@ export default function Post(props) {
 
 export async function getServerSideProps({ req }) {
   const { lang, token } = req.cookies;
-  console.log(jwtDecode(token))
+  console.log(jwtDecode(token));
   if (!token) {
     return {
       redirect: {
