@@ -23,7 +23,7 @@ import useAuthStore from "store/authStore";
 import Cookies from "js-cookie";
 
 function Login() {
-  const toast = useToast()
+  const toast = useToast();
   const router = useRouter();
   const storeAuth = useAuthStore((state) => state);
   const [email, setEmail] = useState("");
@@ -31,7 +31,8 @@ function Login() {
 
   const handleSubmit = async () => {
     const respon = await serviceLogin({ email, password });
-    if (respon.error) {
+    console.log("respon login", respon);
+    if (respon?.error) {
       return toast({
         position: "bottom-right",
         title: "Failed to Login.",

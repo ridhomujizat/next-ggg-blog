@@ -19,3 +19,13 @@ export const serviceRegister = async (data) => {
     data,
   });
 };
+
+export const serviceRegisterAdmin = async (data) => {
+  const url = `/api/users/admin/register`;
+
+  return callAPI({
+    url,
+    method: "POST",
+    data,
+  });
+};
