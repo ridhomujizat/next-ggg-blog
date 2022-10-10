@@ -25,6 +25,8 @@ import { getDetailBlog, updateBlog, uploadImageBlog } from "service/post";
 import edjsHTML from "editorjs-html";
 import moment from "moment";
 import useAuthStore from "store/authStore";
+import jwtDecode from "jwt-decode";
+
 const CustomEditor = dynamic(() => import("components/RichEditor"), {
   ssr: false,
 });
@@ -328,7 +330,19 @@ const TextTransform = ({ string }) => {
 
 export async function getServerSideProps({ req }) {
   const { lang, token } = req.cookies;
+
+  let notAllowed = false;
+
   if (!token) {
+    notAllowed = true;
+  }
+  if (token) {
+    const { role } = jwtDecode(token);
+    if (role?.role_name !== "Admin") {
+      notAllowed = true;
+    }
+  }
+  if (notAllowed) {
     return {
       redirect: {
         destination: "/login",
@@ -336,6 +350,7 @@ export async function getServerSideProps({ req }) {
       },
     };
   }
+  
   const initialLang = generateLang(lang);
 
   return {

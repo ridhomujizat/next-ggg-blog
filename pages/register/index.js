@@ -175,4 +175,20 @@ function Register() {
   );
 }
 
+export async function getServerSideProps({ req }) {
+  const { lang, token } = req.cookies;
+  if (token) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+}
 export default Register;
+

@@ -16,6 +16,8 @@ import Link from "next/link";
 import ModalDeleteItem from "components/Modal/ModalDeleteItem";
 import { getLabels, deleteLabels } from "service/labels";
 import { MdOutlineEdit, MdDeleteOutline } from "react-icons/md";
+import jwtDecode from "jwt-decode";
+
 export default function Post(props) {
   const toast = useToast();
   const [modalDelete, setModalDelete] = useState({ open: false, id: null });
@@ -136,7 +138,19 @@ export default function Post(props) {
 
 export async function getServerSideProps({ req }) {
   const { lang, token } = req.cookies;
+
+  let notAllowed = false;
+
   if (!token) {
+    notAllowed = true;
+  }
+  if (token) {
+    const { role } = jwtDecode(token);
+    if (role?.role_name !== "Admin") {
+      notAllowed = true;
+    }
+  }
+  if (notAllowed) {
     return {
       redirect: {
         destination: "/login",

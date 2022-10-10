@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import ModalDeleteItem from "components/Modal/ModalDeleteItem";
-import { getBlogs, deleteCategory, deleteImageCategory } from "service/post";
+import { getBlogs, deleteBlog, deleteImageCategory } from "service/post";
 import { MdOutlineEdit, MdDeleteOutline } from "react-icons/md";
 import jwtDecode from "jwt-decode";
 
@@ -36,7 +36,7 @@ export default function Post(props) {
     }
   };
   const handleDelete = async () => {
-    const respon = await deleteCategory({ id: modalDelete.id });
+    const respon = await deleteBlog({ id: modalDelete.id });
     if (!respon.error) {
       toast({
         position: "bottom-right",
@@ -156,8 +156,19 @@ export default function Post(props) {
 
 export async function getServerSideProps({ req }) {
   const { lang, token } = req.cookies;
-  console.log(jwtDecode(token));
+
+  let notAllowed = false;
+
   if (!token) {
+    notAllowed = true;
+  }
+  if (token) {
+    const { role } = jwtDecode(token);
+    if (role?.role_name !== "Admin") {
+      notAllowed = true;
+    }
+  }
+  if (notAllowed) {
     return {
       redirect: {
         destination: "/login",

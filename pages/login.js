@@ -159,7 +159,7 @@ export async function getServerSideProps({ req }) {
   if (token) {
     return {
       redirect: {
-        destination: "/admin/post",
+        destination: "/",
         permanent: false,
       },
     };

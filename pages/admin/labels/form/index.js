@@ -19,6 +19,7 @@ import {
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { postLabel } from "service/labels";
+import jwtDecode from "jwt-decode";
 
 export default function Form(props) {
   const [loading, setLoading] = useState(false);
@@ -155,7 +156,19 @@ export default function Form(props) {
 
 export async function getServerSideProps({ req }) {
   const { lang, token } = req.cookies;
+
+  let notAllowed = false;
+
   if (!token) {
+    notAllowed = true;
+  }
+  if (token) {
+    const { role } = jwtDecode(token);
+    if (role?.role_name !== "Admin") {
+      notAllowed = true;
+    }
+  }
+  if (notAllowed) {
     return {
       redirect: {
         destination: "/login",

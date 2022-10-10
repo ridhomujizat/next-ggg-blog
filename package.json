@@ -16,6 +16,7 @@
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "axios": "^0.27.2",
+    "chakra-ui-autocomplete": "^1.4.5",
     "editorjs-html": "^3.4.2",
     "editorjs-react-renderer": "^3.4.0",
     "editorjs-style": "^3.0.3",
