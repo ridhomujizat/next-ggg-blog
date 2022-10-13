@@ -189,7 +189,8 @@ export async function getServerSideProps({ req, query }) {
     type: initialLang.currentLang,
   });
 
-  const {blogs} = respon.data
+  console.log(respon)
+  const { blogs } = respon.data;
   return {
     props: {
       ...initialLang,

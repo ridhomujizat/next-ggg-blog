@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { useEffect, useState } from "react";
 import AdminLayout from "layout/AdminLayout";
 import generateLang from "lang";
@@ -11,11 +12,15 @@ import {
   Button,
   HStack,
   useToast,
-  Image
+  Image,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import ModalDeleteItem from "components/Modal/ModalDeleteItem";
-import { getCategorys, deleteCategory, deleteImageCategory } from "service/category";
+import {
+  getCategorys,
+  deleteCategory,
+  deleteImageCategory,
+} from "service/category";
 import { MdOutlineEdit, MdDeleteOutline } from "react-icons/md";
 import jwtDecode from "jwt-decode";
 
@@ -29,13 +34,13 @@ export default function Post(props) {
 
   const getData = async () => {
     const respon = await getCategorys({ type: props.currentLang });
-    if (!respon.error) {
+    if (!respon?.error) {
       setData(respon.data);
     }
   };
   const handleDelete = async () => {
     const respon = await deleteCategory({ id: modalDelete.id });
-    if (!respon.error) {
+    if (!respon?.error) {
       toast({
         position: "bottom-right",
         title: "Category deleted.",
@@ -44,7 +49,7 @@ export default function Post(props) {
         duration: 6000,
         isClosable: true,
       });
-      setModalDelete({open: false, id: null})
+      setModalDelete({ open: false, id: null });
       getData();
     } else {
       toast({
@@ -65,7 +70,14 @@ export default function Post(props) {
       label: "Image",
       align: "center",
       format: (val) => {
-        return <Image src={val.image_url} alt={val.category_name} maxW="200px" margin="auto" />
+        return (
+          <Image
+            src={val.image_url}
+            alt={val.category_name}
+            maxW="200px"
+            margin="auto"
+          />
+        );
       },
     },
     {
@@ -106,42 +118,49 @@ export default function Post(props) {
   ];
 
   return (
-    <AdminLayout currentLang={props.currentLang} text={props.text}>
-      <Stack spacing={4}>
-        <Flex
-          flexDirection="row"
-          alignItems="center"
-          justifyContent="space-between"
-          flexWrap="wrap"
-        >
-          <Box>
-            <Flex flexDirection="row" alignItems="center">
-              <Text fontSize="4xl" fontWeight="bold" mr="10px">
-                Categorys
-              </Text>
-              <Link href="/admin/categorys/form">
-                <Button
-                  borderWidth={1}
-                  borderColor="#FFFFFF80"
-                  background="transparent"
-                  h="37px"
-                  w="154px"
-                >
-                  Add New
-                </Button>
-              </Link>
-            </Flex>
-          </Box>
-        </Flex>
-        <Table headCell={headCell} data={data} />
-      </Stack>
-      <ModalDeleteItem
-        open={modalDelete.open}
-        item="label"
-        onClose={() => setModalDelete(false)}
-        onDelete={handleDelete}
-      />
-    </AdminLayout>
+    <>
+      <Head>
+        <title>Category | GGG</title>
+        <meta name="description" content={props.text.home.desc} />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <AdminLayout currentLang={props.currentLang} text={props.text}>
+        <Stack spacing={4}>
+          <Flex
+            flexDirection="row"
+            alignItems="center"
+            justifyContent="space-between"
+            flexWrap="wrap"
+          >
+            <Box>
+              <Flex flexDirection="row" alignItems="center">
+                <Text fontSize="4xl" fontWeight="bold" mr="10px">
+                  Categorys
+                </Text>
+                <Link href="/admin/categorys/form">
+                  <Button
+                    borderWidth={1}
+                    borderColor="#FFFFFF80"
+                    background="transparent"
+                    h="37px"
+                    w="154px"
+                  >
+                    Add New
+                  </Button>
+                </Link>
+              </Flex>
+            </Box>
+          </Flex>
+          <Table headCell={headCell} data={data} />
+        </Stack>
+        <ModalDeleteItem
+          open={modalDelete.open}
+          item="label"
+          onClose={() => setModalDelete(false)}
+          onDelete={handleDelete}
+        />
+      </AdminLayout>
+    </>
   );
 }
 
@@ -155,7 +174,7 @@ export async function getServerSideProps({ req }) {
   }
   if (token) {
     const { role } = jwtDecode(token);
-    if (role?.role_name !== "Admin") {
+    if (role?.role_name === "User") {
       notAllowed = true;
     }
   }

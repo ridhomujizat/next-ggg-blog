@@ -29,3 +29,14 @@ export const serviceRegisterAdmin = async (data) => {
     data,
   });
 };
+
+export const updateProfile = async ({id, data}) => {
+  const url = `/api/users/${id}`;
+
+  return callAPI({
+    url,
+    method: "POST",
+    data,
+    token: true
+  });
+};

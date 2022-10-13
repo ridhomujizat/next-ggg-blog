@@ -47,7 +47,7 @@ export default function Form(props) {
         image_url: responImage.image_url,
       });
 
-      if (!respon.error) {
+      if (!respon?.error) {
         route.push("/admin/categorys");
         toast({
           position: "bottom-right",
@@ -203,7 +203,7 @@ export async function getServerSideProps({ req }) {
   }
   if (token) {
     const { role } = jwtDecode(token);
-    if (role?.role_name !== "Admin") {
+    if (role?.role_name === "User") {
       notAllowed = true;
     }
   }

@@ -60,9 +60,10 @@ export default function Blog(props) {
               <Text mb="10px" fontWeight="bold" fontSize="15px">
                 Category
               </Text>
+              {console.log(blog)}
               <Label
-                title={blog?.CategoryBlog?.category_name}
-                imageUrl={blog?.CategoryBlog?.image_url}
+                title={blog?.category_blog?.category_name}
+                imageUrl={blog?.category_blog?.image_url}
               />
             </Box>
             <Box my="20px">
@@ -93,14 +94,15 @@ export async function getServerSideProps({ req, params }) {
     type: initialLang.currentLang,
   });
 
-  if (respon?.error) {
-    return {
-      redirect: {
-        destination: "/not-found",
-        permanent: false,
-      },
-    };
-  }
+
+  // if (respon?.error) {
+  //   return {
+  //     redirect: {
+  //       destination: "/not-found",
+  //       permanent: false,
+  //     },
+  //   };
+  // }
   console.log(respon);
   return {
     props: {

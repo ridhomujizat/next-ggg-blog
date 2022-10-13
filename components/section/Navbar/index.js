@@ -1,7 +1,16 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { Container, Box, Button, Text, Link } from "@chakra-ui/react";
+import {
+  Container,
+  Box,
+  Button,
+  Text,
+  Link,
+  IconButton,
+  Image as ImageStyle,
+} from "@chakra-ui/react";
+import { BsPersonFill } from "react-icons/bs";
 import Cookies from "js-cookie";
 import useAuthStore from "store/authStore";
 
@@ -53,6 +62,21 @@ export default function Navbar({ currentLang, text }) {
             {auth.isLogin ? (
               <>
                 <Text fontWeight="bold">Hi, {auth.user.username}</Text>
+                {auth.user?.image_url ? (
+                  <Link href="/profile">
+                    <ImageStyle
+                      src={auth.user.image_url}
+                      alt={auth.user.username}
+                      borderRadius="full"
+                      objectFit="cover"
+                      boxSize="50px"
+                    />
+                  </Link>
+                ) : (
+                  <IconButton rounded="full">
+                    <BsPersonFill />
+                  </IconButton>
+                )}
                 <Button variant="outline" onClick={handleLogout}>
                   {text.logout}
                 </Button>

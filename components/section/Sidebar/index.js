@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { useState, useEffect } from "react";
 import {
   IconButton,
   Box,
@@ -21,24 +21,58 @@ import {
 } from "react-icons/fi";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import useAuthStore from "store/authStore";
 
 const LinkItems = [
   // { name: "Dashboard", icon: FiHome, link: "dashboard" },
-  { name: "Post", icon: FiTrendingUp, link: "post" },
-  { name: "Cateogry", icon: FiCompass, link: "categorys" },
-  { name: "Labels", icon: FiCompass, link: "labels" },
-  { name: "User", icon: FiCompass, link: "user" },
+  {
+    name: "Profile",
+    icon: FiTrendingUp,
+    link: "/profile",
+    privilege: ["Admin", "SuperAdmin", "User"],
+  },
+  {
+    name: "Post",
+    icon: FiTrendingUp,
+    link: "/admin/post",
+    privilege: ["Admin", "SuperAdmin"],
+  },
+  {
+    name: "Category",
+    icon: FiCompass,
+    link: "/admin/categorys",
+    privilege: ["Admin", "SuperAdmin"],
+  },
+  {
+    name: "Labels",
+    icon: FiCompass,
+    link: "/admin/labels",
+    privilege: ["Admin", "SuperAdmin"],
+  },
+  {
+    name: "User Management",
+    icon: FiCompass,
+    link: "/admin/user",
+    privilege: ["SuperAdmin"],
+  },
   // { name: "Settings", icon: FiSettings, link: "setting" },
 ];
 
 export default function Sidebar({ children }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isLogin, user, role } = useAuthStore((state) => state);
+  const [auth, setAuth] = useState({ isLogin: false, user: null, role: null });
+
+  useEffect(() => {
+    setAuth({ isLogin, user, role });
+  }, []);
 
   return (
     <Box minH="100vh" background="#0C0E17">
       <SidebarContent
         onClose={() => onClose}
         display={{ base: "none", md: "block" }}
+        auth={auth}
       />
       <Drawer
         autoFocus={false}
@@ -50,7 +84,7 @@ export default function Sidebar({ children }) {
         size="full"
       >
         <DrawerContent>
-          <SidebarContent onClose={onClose} />
+          <SidebarContent onClose={onClose} auth={auth} />
         </DrawerContent>
       </Drawer>
       {/* mobilenav */}
@@ -62,7 +96,7 @@ export default function Sidebar({ children }) {
   );
 }
 
-const SidebarContent = ({ onClose, ...rest }) => {
+const SidebarContent = ({ onClose, auth, ...rest }) => {
   return (
     <Box
       bg={"#0C0E17"}
@@ -82,7 +116,9 @@ const SidebarContent = ({ onClose, ...rest }) => {
       >
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
-      {LinkItems.map((link) => (
+      {LinkItems.filter((val) =>
+        val.privilege.includes(auth?.role?.role_name)
+      ).map((link) => (
         <NavItem key={link.name} icon={link.icon} link={link.link}>
           {link.name}
         </NavItem>
@@ -94,12 +130,8 @@ const SidebarContent = ({ onClose, ...rest }) => {
 const NavItem = ({ icon, children, link, ...rest }) => {
   const router = useRouter();
 
-  const AtferSlash = (string) => {
-    return string.split("/")[2];
-  };
-
   return (
-    <Link href={`/admin/${link}`} style={{ textDecoration: "none" }}>
+    <Link href={link} style={{ textDecoration: "none" }}>
       <a>
         <Flex
           align="center"
@@ -110,9 +142,7 @@ const NavItem = ({ icon, children, link, ...rest }) => {
           borderRadius="xl"
           role="group"
           cursor="pointer"
-          background={
-            link === AtferSlash(`${router.pathname}`) ? "#1C2975" : ""
-          }
+          background={link === router.pathname ? "#1C2975" : ""}
           border="1px"
           borderColor="white"
           _hover={{

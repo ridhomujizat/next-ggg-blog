@@ -38,7 +38,7 @@ export default function Form(props) {
     onSubmit: async (value) => {
       setLoading(true);
       const respon = await updateLabels({id, data: value});
-      if (!respon.error) {
+      if (!respon?.error) {
         route.push("/admin/labels");
         toast({
           position: "bottom-right",
@@ -183,7 +183,7 @@ export async function getServerSideProps({ req }) {
   }
   if (token) {
     const { role } = jwtDecode(token);
-    if (role?.role_name !== "Admin") {
+    if (role?.role_name === "User") {
       notAllowed = true;
     }
   }

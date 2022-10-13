@@ -29,7 +29,7 @@ export default function Post(props) {
 
   const getData = async () => {
     const respon = await getBlogs({ type: props.currentLang });
-    if (!respon.error) {
+    if (!respon?.error) {
       const { blogs } = respon.data;
 
       setData(blogs);
@@ -37,7 +37,7 @@ export default function Post(props) {
   };
   const handleDelete = async () => {
     const respon = await deleteBlog({ id: modalDelete.id });
-    if (!respon.error) {
+    if (!respon?.error) {
       toast({
         position: "bottom-right",
         title: "Category deleted.",
@@ -164,7 +164,7 @@ export async function getServerSideProps({ req }) {
   }
   if (token) {
     const { role } = jwtDecode(token);
-    if (role?.role_name !== "Admin") {
+    if (role?.role_name === "User") {
       notAllowed = true;
     }
   }

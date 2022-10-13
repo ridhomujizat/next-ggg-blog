@@ -28,13 +28,13 @@ export default function Post(props) {
 
   const getData = async () => {
     const respon = await getLabels({ type: props.currentLang });
-    if (!respon.error) {
+    if (!respon?.error) {
       setData(respon.data);
     }
   };
   const handleDelete = async () => {
     const respon = await deleteLabels({ id: modalDelete.id });
-    if (!respon.error) {
+    if (!respon?.error) {
       toast({
         position: "bottom-right",
         title: "Label deleted.",
@@ -146,7 +146,7 @@ export async function getServerSideProps({ req }) {
   }
   if (token) {
     const { role } = jwtDecode(token);
-    if (role?.role_name !== "Admin") {
+    if (role?.role_name === "User") {
       notAllowed = true;
     }
   }

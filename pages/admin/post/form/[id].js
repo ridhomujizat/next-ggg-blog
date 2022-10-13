@@ -22,7 +22,9 @@ import {
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { getDetailBlog, updateBlog, uploadImageBlog } from "service/post";
-import edjsHTML from "editorjs-html";
+import { getLabels } from "service/labels";
+import { getCategorys } from "service/category";
+import { Select } from "chakra-react-select";
 import moment from "moment";
 import useAuthStore from "store/authStore";
 import jwtDecode from "jwt-decode";
@@ -47,17 +49,19 @@ const value = {
   image_url: "",
   meta_description_idn: "",
   meta_description_en: "",
-  date: Date.now(),
-  category_id: 1,
-  array_id_labels: "1;2",
+  category_id: [],
+  array_id_labels: [],
 };
 
 export default function Form(props) {
   const stateAuth = useAuthStore((state) => state);
+  const [labels, setLabels] = useState([]);
+  const [categorys, setCategorys] = useState([]);
   const [type, setType] = useState("en");
   const [auth, setAuth] = useState(null);
   const [loading, setLoading] = useState(false);
   const [initialValue, setIntialValue] = useState(value);
+
   const toast = useToast();
   const route = useRouter();
   const { id } = route.query;
@@ -74,26 +78,30 @@ export default function Form(props) {
         delete value.image;
         value.image_url = responImage.image_url;
       }
-      // return console.log(value);
-      // const edjsParser = edjsHTML();
-      // let html = edjsParser.parse(JSON.parse(value.content_en));
-      // return console.log(html);
-      // HANDLE IMAGE UPLOAD
-      // delete value.image;
 
+      // slug
       value.slug_en = value.title_en.split(" ").join("-");
       value.slug_idn = value.title_en.split(" ").join("-");
 
+      //category & value
+      const valueLabels = value.array_id_labels
+        .map((val) => val.value)
+        .join(",");
+      const valueCategory = value.category_id[0].value;
       // return console.log(value)
       const respon = await updateBlog({
         id,
         data: {
           ...value,
+          category_id: valueCategory,
+          array_id_labels: valueLabels,
+          date: moment().format("YYYY-MM-DD HH:mm:ss"),
+
           // date: moment().format("YYYY-MM-DD HH:mm:ss  "),
         },
       });
 
-      if (!respon.error) {
+      if (!respon?.error) {
         delete value.image;
         route.push("/admin/post");
         toast({
@@ -128,33 +136,58 @@ export default function Form(props) {
     enableReinitialize: true,
   });
 
-  const getCategory = async () => {
-    const responEN = await getDetailBlog({ id, type: "en" });
-    const responIDN = await getDetailBlog({ id, type: "idn" });
-    setIntialValue({
-      ...responEN.data,
-      array_id_labels: responEN.data.array_id_labels
-        .map((val) => val.id)
-        .join(","),
-      CategoryBlog: responEN.data.CategoryBlog.id,
+  const getPostDetails = async () => {
+    const respon = await getDetailBlog({ id, type: "en" });
 
-      // title_idn: responIDN.data.title,
-      // title_en: responEN.data.title,
-      // content_idn: responIDN.data.content,
-      // content_en: responEN.data.content,
-      // slug_idn: responIDN.data.slug,
-      // slug_en: responEN.data.slug,
-      // meta_description_idn: responIDN.data.meta_description,
-      // meta_description_en: responEN.data.meta_description,
+    setIntialValue({
+      ...respon.data,
+      array_id_labels: respon.data.array_id_labels.map((val) => ({
+        value: val.id,
+        label: val[`label_name_${props.currentLang}`],
+      })),
+      category_id: [
+        {
+          value: respon.data.category_blog.id,
+          label:
+            respon.data.category_blog[`category_name_${props.currentLang}`],
+        },
+      ],
     });
-    setTimeout(() => {
-      formik.setFieldValue("content_idn", responIDN.data.content_idn);
-      formik.setFieldValue("content_en", responIDN.data.content_en);
-    }, 6000);
+
+    // setTimeout(() => {
+    //   formik.setFieldValue("content_idn", respon.data.conten);
+    //   formik.setFieldValue("content_en", respon.data.cont_en);
+    // }, 6000);
+  };
+
+  const getAdditionalData = async () => {
+    const responseCat = await getCategorys({
+      type: props.currentLang,
+    });
+    const responseLabel = await getLabels({
+      type: props.currentLang,
+    });
+    if (responseCat.data.length > 0) {
+      setCategorys(
+        responseCat.data?.map((val) => ({
+          value: val.id,
+          label: val.category_name,
+        }))
+      );
+    }
+    if (responseLabel.data.length > 0) {
+      setLabels(
+        responseLabel.data?.map((val) => ({
+          value: val.id,
+          label: val.label_name,
+        }))
+      );
+    }
   };
 
   useEffect(() => {
-    getCategory();
+    getPostDetails();
+    getAdditionalData();
   }, []);
 
   useEffect(() => {
@@ -199,6 +232,37 @@ export default function Form(props) {
               onBlur={formik.handleBlur}
               isInvalid={formik.touched.image && Boolean(formik.errors.image)}
             />
+          </Flex>
+          <Flex p="4">
+            <Stack spacing={2} w="100%">
+              <Text>Labels</Text>
+              <Select
+                isMulti
+                name="colors"
+                options={labels}
+                placeholder="Select labels..."
+                closeMenuOnSelect={false}
+                value={formik.values.array_id_labels}
+                onChange={(e) => {
+                  formik.setFieldValue("array_id_labels", e);
+                }}
+              />
+            </Stack>
+          </Flex>
+          <Flex p="4">
+            <Stack spacing={2} w="100%">
+              <Text>Category</Text>
+              <Select
+                name="colors"
+                options={categorys}
+                placeholder="Select category..."
+                closeMenuOnSelect={false}
+                value={formik.values.category_id}
+                onChange={(e) => {
+                  formik.setFieldValue("category_id", e);
+                }}
+              />
+            </Stack>
           </Flex>
           <TabPanels>
             <TabPanel>
@@ -338,7 +402,7 @@ export async function getServerSideProps({ req }) {
   }
   if (token) {
     const { role } = jwtDecode(token);
-    if (role?.role_name !== "Admin") {
+    if (role?.role_name === "User") {
       notAllowed = true;
     }
   }
@@ -350,7 +414,7 @@ export async function getServerSideProps({ req }) {
       },
     };
   }
-  
+
   const initialLang = generateLang(lang);
 
   return {
