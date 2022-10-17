@@ -74,16 +74,22 @@ export default function Footer({ text }) {
             </Box>
             <Text fontSize={"sm"}>© 2022 GGG. All rights reserved</Text>
             <Stack direction={"row"} spacing={6}>
-              <SocialButton label={"Twitter"} href={"#"}>
+              <SocialButton
+                label={"Twitter"}
+                href={"https://twitter.com/goodgamesguild"}
+              >
                 <FaTwitter size={[28, 48]} />
               </SocialButton>
               <SocialButton label={"Tiktok"} href={"#"}>
                 <FaTiktok size={[28, 48]} />
               </SocialButton>
-              <SocialButton label={"Instagram"} href={"#"}>
+              <SocialButton
+                label={"Instagram"}
+                href={"https://www.instagram.com/goodgamesguild/"}
+              >
                 <FaInstagram size={[28, 48]} />
               </SocialButton>
-              <SocialButton label={"Discord"} href={"#"}>
+              <SocialButton label={"Discord"} href={"https://t.co/DEunOdlvKY"}>
                 <IoLogoDiscord size={[28, 48]} />
               </SocialButton>
             </Stack>
