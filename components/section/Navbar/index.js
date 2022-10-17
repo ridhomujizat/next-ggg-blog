@@ -13,8 +13,6 @@ import {
 import { BsPersonFill } from "react-icons/bs";
 import Cookies from "js-cookie";
 import useAuthStore from "store/authStore";
-
-import logo from "assets/logo-ggg.png";
 const langList = ["en", "idn"];
 
 export default function Navbar({ currentLang, text }) {
@@ -51,10 +49,10 @@ export default function Navbar({ currentLang, text }) {
         <Box as="header" sx={sx.header}>
           <Link href="/">
             <Image
-              src={logo}
+              src={"https://goodgamesguild.com/front/ggg/logo-with-text.png"}
               alt="Picture of the author"
-              width="47px"
-              height="37px"
+              width="200px"
+              height="41px"
             />
           </Link>
 

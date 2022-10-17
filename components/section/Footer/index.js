@@ -8,17 +8,13 @@ import {
   Text,
   VisuallyHidden,
   Input,
-  IconButton,
-  useColorModeValue,
   InputGroup,
   InputRightElement,
   Button,
 } from "@chakra-ui/react";
-import { ReactNode } from "react";
-import { FaInstagram, FaTwitter, FaYoutube, FaTiktok } from "react-icons/fa";
+import { FaInstagram, FaTwitter, FaYoutube, FaTelegram } from "react-icons/fa";
 import { IoLogoDiscord } from "react-icons/io5";
-import { BiMailSend } from "react-icons/bi";
-import logo from "assets/logo-ggg.png";
+import { BsMedium } from "react-icons/bs";
 import Image from "next/image";
 
 const SocialButton = ({ children, label, href }) => {
@@ -66,31 +62,48 @@ export default function Footer({ text }) {
           <Stack spacing={4}>
             <Box>
               <Image
-                src={logo}
+                src={"https://goodgamesguild.com/front/ggg/logo-with-text.png"}
                 alt="Picture of the author"
-                width="47px"
-                height="37px"
+                width="200px"
+                height="41px"
               />
             </Box>
             <Text fontSize={"sm"}>© 2022 GGG. All rights reserved</Text>
             <Stack direction={"row"} spacing={6}>
+              <SocialButton
+                label={"Telegram"}
+                href={"https://t.me/GoodGamesGuildChat"}
+              >
+                <FaTelegram size={[28, 48]} />
+              </SocialButton>
               <SocialButton
                 label={"Twitter"}
                 href={"https://twitter.com/goodgamesguild"}
               >
                 <FaTwitter size={[28, 48]} />
               </SocialButton>
-              <SocialButton label={"Tiktok"} href={"#"}>
-                <FaTiktok size={[28, 48]} />
+              <SocialButton label={"Discord"} href={"https://t.co/DEunOdlvKY"}>
+                <IoLogoDiscord size={[28, 48]} />
+              </SocialButton>
+              <SocialButton
+                label={"Medium"}
+                href={"https://medium.com/@goodgamesguild"}
+              >
+                <BsMedium size={[28, 48]} />
+              </SocialButton>
+              <SocialButton
+                label={"Youtube"}
+                href={
+                  "https://www.youtube.com/channel/UCOew5H8OxAt_MGSYphnob3A"
+                }
+              >
+                <FaYoutube size={[28, 48]} />
               </SocialButton>
               <SocialButton
                 label={"Instagram"}
                 href={"https://www.instagram.com/goodgamesguild/"}
               >
                 <FaInstagram size={[28, 48]} />
-              </SocialButton>
-              <SocialButton label={"Discord"} href={"https://t.co/DEunOdlvKY"}>
-                <IoLogoDiscord size={[28, 48]} />
               </SocialButton>
             </Stack>
           </Stack>

@@ -2,6 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-}
+  images: { domains: ["goodgamesguild.com"] },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
