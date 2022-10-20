@@ -1,6 +1,7 @@
 import React from "react";
 import Head from "next/head";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
 import generateLang from "lang";
 import PageLayouts from "layout/PagesLayout";
 import Thumbnail from "components/Thumbnail";
@@ -16,19 +17,23 @@ import {
   Spacer,
   Stack,
   GridItem,
+  IconButton,
+  Image,
 } from "@chakra-ui/react";
-import { BsSearch } from "react-icons/bs";
+import { BsSearch, BsX } from "react-icons/bs";
 import { getBlogs } from "service/post";
 import { getCategorys } from "service/category";
 import { getLabels } from "service/labels";
 import moment from "moment";
 
 export default function Home(props) {
-  const { limit, page, BlogList } = props;
+  const { params, BlogList } = props;
+  const [valueSearch, setValueSearch] = React.useState("");
+  const router = useRouter();
 
   const stickyPost = () => {
     let data = [];
-    if (page === 1) {
+    if (params.page == 1) {
       data = props.BlogList?.slice(0, 1);
     }
 
@@ -37,7 +42,7 @@ export default function Home(props) {
 
   const firstColum = () => {
     let data = [];
-    if (page === 1) {
+    if (params.page == 1) {
       data = props.BlogList?.slice(1, 5);
     }
     return data;
@@ -45,11 +50,42 @@ export default function Home(props) {
 
   const listColumn = () => {
     let data = [];
-    if (page === 1) {
+    if (params.page == 1) {
       data = props.BlogList?.slice(6, data.length + 1);
+    } else {
+      data = props.BlogList;
     }
     return data;
   };
+
+  // const handleSearch = () => {
+  //   router.push({
+  //     query: {
+  //       search: valueSearch,
+  //       ...params,
+  //     },
+  //   });
+  // };
+  const handleParams = (value) => {
+    router.push({
+      query: {
+        ...props.params,
+        ...value,
+      },
+    });
+  };
+
+  const removeParams = (value) => {
+    const newParams = props.params;
+    delete newParams[value];
+    router.push({
+      query: {
+        ...newParams,
+      },
+    });
+  };
+
+  const isFilterbyCategoryLabels = params.category || params.label;
 
   return (
     <div>
@@ -63,7 +99,7 @@ export default function Home(props) {
           <Stack spacing={4}>
             {/* TITILE PAGE  */}
             <SimpleGrid
-              columns={[1, null, 2]}
+              columns={isFilterbyCategoryLabels ? [1, null, 1] : [1, null, 2]}
               spacing={[5, null, 10]}
               alignItems="center"
             >
@@ -76,11 +112,72 @@ export default function Home(props) {
                 </Text>
               </Box>
               <Box>
-                <InputGroup>
+                {isFilterbyCategoryLabels && (
+                  <Box display="flex" gap="20px">
+                    {params.category && (
+                      <Box display="flex" mb="10px" gap="20px">
+                        <Text>Category:</Text>
+                        <Box maxW="200px" display="flex">
+                          <Image
+                            src={
+                              props.categories.filter(
+                                (val) => val.id == params.category
+                              )[0]?.image_url
+                            }
+                            alt="Picture of the author"
+                            width="50px"
+                            height="50px"
+                          />
+                          <Text fontWeight={700} marginLeft={2}>
+                            {
+                              props.categories.filter(
+                                (val) => val.id == params.category
+                              )[0]?.category_name
+                            }
+                          </Text>
+                          <Box cursor="pointer" onClick={() => removeParams('category')}>
+                            <BsX size="25" />
+                          </Box>
+                        </Box>
+                      </Box>
+                    )}
+                    {params.label && (
+                      <Box display="flex" mb="10px" gap="20px">
+                        <Text>Label:</Text>
+                        <Box maxW="200px" display="flex">
+                          <Text fontWeight={700} marginLeft={2}>
+                            {
+                              props.labels.filter(
+                                (val) => val.id == params.label
+                              )[0]?.label_name
+                            }
+                          </Text>
+                          <Box cursor="pointer" onClick={() => removeParams('label')}>
+                            <BsX size="25" />
+                          </Box>
+                        </Box>
+                      </Box>
+                    )}
+                  </Box>
+                )}
+
+                <InputGroup maxW="600px">
                   <InputRightElement>
-                    <BsSearch />
+                    <IconButton
+                      onClick={() => {
+                        handleParams({ search: valueSearch });
+                      }}
+                    >
+                      <BsSearch />
+                    </IconButton>
                   </InputRightElement>
-                  <Input placeholder="Search Blog Post" />
+                  <Input
+                    placeholder="Search Blog Post"
+                    onChange={(e) => {
+                      e.preventDefault();
+                      setValueSearch(e.target.value);
+                    }}
+                  />
                 </InputGroup>
               </Box>
             </SimpleGrid>
@@ -154,6 +251,7 @@ export default function Home(props) {
               <h1>asdas</h1>
             </NextLink> */}
             <Cateogries
+              handleParams={(e) => handleParams(e)}
               categories={props.categories}
               labels={props.labels}
               text={props.text.home}
@@ -179,6 +277,7 @@ export async function getServerSideProps({ req, query }) {
   const initialLang = await generateLang(lang);
   const respon = await getBlogs({
     type: initialLang.currentLang,
+    ...query,
     limit,
     page,
   });
@@ -189,13 +288,15 @@ export async function getServerSideProps({ req, query }) {
     type: initialLang.currentLang,
   });
 
-  console.log(respon);
   const { blogs } = respon.data;
   return {
     props: {
       ...initialLang,
-      page,
-      limit,
+      params: {
+        ...query,
+        page,
+        limit,
+      },
       // stickyBlog,
       BlogList: blogs,
       categories: responseCat.data,

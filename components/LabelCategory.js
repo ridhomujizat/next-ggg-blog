@@ -1,7 +1,7 @@
 import React from "react";
 import { WrapItem, Center, Image, Text } from "@chakra-ui/react";
 
-export default function Label({ imageUrl, title }) {
+export default function Label({ imageUrl, title, onClick }) {
   return (
     <WrapItem>
       <Center
@@ -10,6 +10,8 @@ export default function Label({ imageUrl, title }) {
         borderRadius={20}
         px="15px"
         py="20px"
+        cursor="pointer"
+        onClick={onClick}
       >
         {imageUrl && (
           <Image

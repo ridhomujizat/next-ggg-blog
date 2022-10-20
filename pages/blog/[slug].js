@@ -24,8 +24,17 @@ const BlogStyled = styled(Box)`
 `;
 
 export default function Blog(props) {
+  const router = useRouter();
   const { blog } = props;
 
+  const handleToBlog = (value) => {
+    router.push({
+      pathname: "/",
+      query: {
+        ...value,
+      },
+    });
+  };
   return (
     <div>
       <Head>
@@ -62,6 +71,9 @@ export default function Blog(props) {
               </Text>
               {console.log(blog)}
               <Label
+                onClick={() =>
+                  handleToBlog({ category: blog?.category_blog?.id })
+                }
                 title={blog?.category_blog?.category_name}
                 imageUrl={blog?.category_blog?.image_url}
               />
@@ -71,7 +83,13 @@ export default function Blog(props) {
                 Label
               </Text>
               {blog.array_id_labels.map((val) => (
-                <Label key={val.id} title={val?.label_name} />
+                <Label
+                  key={val.id}
+                  title={val?.label_name}
+                  onClick={() =>
+                    handleToBlog({ label: val?.id })
+                  }
+                />
               ))}
             </Box>
             <Box my="20px">
@@ -93,7 +111,6 @@ export async function getServerSideProps({ req, params }) {
     id: slug,
     type: initialLang.currentLang,
   });
-
 
   // if (respon?.error) {
   //   return {

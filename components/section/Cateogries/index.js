@@ -1,7 +1,9 @@
 import { Text, Wrap, Stack } from "@chakra-ui/react";
 import Label from "components/LabelCategory";
+import { useRouter } from "next/router";
 
 export default function Home3(props) {
+
   return (
     <Stack spacing={4} py={4} mt={[10, null]}>
       <Stack spacing={4}>
@@ -10,7 +12,12 @@ export default function Home3(props) {
         </Text>
         <Wrap spacing="50px">
           {props.categories?.map((o) => (
-            <Label key={o.id} imageUrl={o.image_url} title={o.category_name} />
+            <Label
+              key={o.id}
+              imageUrl={o.image_url}
+              title={o.category_name}
+              onClick={() => props.handleParams({ category: o.id })}
+            />
           ))}
         </Wrap>
       </Stack>
@@ -20,7 +27,11 @@ export default function Home3(props) {
         </Text>
         <Wrap spacing="50px" marginY={10}>
           {props.labels?.map((o) => (
-            <Label key={o.id} title={o.label_name} />
+            <Label
+              key={o.id}
+              title={o.label_name}
+              onClick={() => props.handleParams({ label: o.id })}
+            />
           ))}
         </Wrap>
       </Stack>

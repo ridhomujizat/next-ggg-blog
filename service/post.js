@@ -1,7 +1,7 @@
 import callAPI from "config/callAPI";
 const CURRENT_API = "blogs";
 
-export const getBlogs = async ({ type, limit, page }) => {
+export const getBlogs = async ({ type, limit, page, label, category }) => {
   const url = `/api/${CURRENT_API}`;
   let params = {};
 
@@ -16,6 +16,15 @@ export const getBlogs = async ({ type, limit, page }) => {
   if (page) {
     params = { ...params, page };
   }
+
+  if (label) {
+    params = { ...params, label_id: label };
+  }
+
+  if (category) {
+    params = { ...params, category_id: category };
+  }
+
 
   return callAPI({
     url,
