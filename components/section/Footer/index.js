@@ -123,7 +123,7 @@ export default function Footer({ text }) {
             </Link>
           </Stack>
           <Stack>
-            <ListHeader>{text.subcribe}</ListHeader>
+            <ListHeader>{text.subscribe}</ListHeader>
             <InputGroup borderRadius="10px">
               <Input
                 background="#D9D9D9"
