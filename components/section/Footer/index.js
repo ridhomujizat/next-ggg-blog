@@ -109,15 +109,21 @@ export default function Footer({ text }) {
           </Stack>
           <Stack align={"flex-start"}>
             <ListHeader>{text.about}</ListHeader>
-            <Link href={"#"} fontWeight={"700"}>
+            <Link href={"https://goodgamesguild.com/"} fontWeight={"700"}>
+              Home
+            </Link>
+            <Link href={"https://blog.goodgamesguild.com/"} fontWeight={"700"}>
               Blog
             </Link>
-            <Link href={"#"} fontWeight={"700"}>
-              Community
+            <Link href={"https://docs.goodgamesguild.com/"} fontWeight={"700"}>
+              Whitepaper
+            </Link>
+            <Link href={"http://goodgameslabs.com/"} fontWeight={"700"}>
+              Incubation
             </Link>
           </Stack>
           <Stack>
-            <ListHeader>{text.subscribe}</ListHeader>
+            <ListHeader>{text.subcribe}</ListHeader>
             <InputGroup borderRadius="10px">
               <Input
                 background="#D9D9D9"

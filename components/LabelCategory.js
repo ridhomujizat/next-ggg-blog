@@ -9,7 +9,7 @@ export default function Label({ imageUrl, title, onClick }) {
         border="1px solid #FFFFFF"
         borderRadius={20}
         px="15px"
-        py="20px"
+        py="10px"
         cursor="pointer"
         onClick={onClick}
       >
@@ -22,7 +22,7 @@ export default function Label({ imageUrl, title, onClick }) {
           />
         )}
 
-        <Text fontWeight={700} marginLeft={2}>
+        <Text fontWeight={700} marginLeft={imageUrl? 2 : 0} fontSize={["12px",null,"15px"]}>
           {title}
         </Text>
       </Center>

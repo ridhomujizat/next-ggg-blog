@@ -29,7 +29,7 @@ export default async function callAPI({
     headers,
     params
   }).catch((err) => err.response);
-  if (response.status > 300) {
+  if (response?.status > 300) {
     const res = {
       error: true,
       message: response.data.statusMessage,
@@ -39,6 +39,6 @@ export default async function callAPI({
   }
 
 
-  const res = response.data
+  const res = response?.data
   return res;
 }
