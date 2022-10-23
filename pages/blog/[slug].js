@@ -9,7 +9,6 @@ import { getDetailBySlugBlog } from "service/post";
 import styled from "@emotion/styled";
 import moment from "moment";
 import Label from "components/LabelCategory";
-import { ShareHorizontal } from "components/IconShare";
 
 const Output = dynamic(() => import("editorjs-react-renderer"), {
   ssr: false,

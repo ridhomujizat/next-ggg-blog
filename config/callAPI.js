@@ -2,15 +2,15 @@ import axios, { AxiosRequestConfig } from "axios";
 import Cookies from "js-cookie";
 
 const axiosCreate = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API
-})
+  baseURL: process.env.NEXT_PUBLIC_API,
+});
 
 export default async function callAPI({
   url,
   method,
   data,
   token,
-  params
+  params,
   // serverToken,
 }) {
   let headers = {};
@@ -22,23 +22,33 @@ export default async function callAPI({
       };
     }
   }
-  const response = await axiosCreate({
-    url,
-    method,
-    data,
-    headers,
-    params
-  }).catch((err) => err.response);
-  if (response?.status > 300) {
+
+  try {
+    const response = await axiosCreate({
+      url,
+      method,
+      data,
+      headers,
+      params,
+    })
+    if (response.status > 300) {
+      const res = {
+        error: true,
+        message: response.data.statusMessage,
+        data: null,
+      };
+      return res;
+    }
+
+    const res = response?.data;
+    return res;
+  } catch (error) {
+    console.log(error)
     const res = {
       error: true,
-      message: response.data.statusMessage,
+      message: error?.message ? error.message : "Network error please try again",
       data: null,
     };
     return res;
   }
-
-
-  const res = response?.data
-  return res;
 }

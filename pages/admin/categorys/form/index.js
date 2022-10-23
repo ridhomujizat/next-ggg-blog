@@ -42,6 +42,7 @@ export default function Form(props) {
 
       const responImage = await uploadImageCategory(f);
       delete value.image;
+      console.log(responImage)
       const respon = await postCategory({
         ...value,
         image_url: responImage.image_url,

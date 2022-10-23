@@ -128,7 +128,7 @@ export default function Footer({ text }) {
               <Input
                 background="#D9D9D9"
                 color="black"
-                placeholder="Enter your email here..."
+                placeholder="Enter your email"
                 _placeholder={{ color: "black" }}
               />
               <InputRightElement w="120px">
