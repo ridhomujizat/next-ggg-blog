@@ -111,14 +111,14 @@ export async function getServerSideProps({ req, params }) {
     type: initialLang.currentLang,
   });
 
-  // if (respon?.error) {
-  //   return {
-  //     redirect: {
-  //       destination: "/not-found",
-  //       permanent: false,
-  //     },
-  //   };
-  // }
+  if (respon?.error) {
+    return {
+      redirect: {
+        destination: "/not-found",
+        permanent: false,
+      },
+    };
+  }
   console.log(respon);
   return {
     props: {
