@@ -13,11 +13,14 @@ export default async function callAPI({
   params,
   // serverToken,
 }) {
-  let headers = {};
+  let headers = {
+    "Access-Control-Allow-Origin": "*"
+  };
   if (token) {
     const tokenCookies = Cookies.get("token");
     if (tokenCookies) {
       headers = {
+        ...headers,
         Authorization: `Bearer ${tokenCookies}`,
       };
     }

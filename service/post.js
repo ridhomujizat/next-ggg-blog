@@ -121,3 +121,14 @@ export const deleteImageBlog= async (data) => {
     token: true,
   });
 };
+
+export const postCategory = async (data) => {
+  const url = `https://apiblog.goodgamesguild.com/api/blogs/category-create`;
+
+  return callAPI({
+    url,
+    method: "POST",
+    data,
+    token: true,
+  });
+};

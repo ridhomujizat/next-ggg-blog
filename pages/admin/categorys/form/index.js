@@ -19,7 +19,8 @@ import {
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { postCategory, uploadImageCategory } from "service/category";
+import {  uploadImageCategory } from "service/category";
+import { postCategory } from "service/post";
 import jwtDecode from "jwt-decode";
 
 export default function Form(props) {
@@ -42,10 +43,10 @@ export default function Form(props) {
 
       const responImage = await uploadImageCategory(f);
       delete value.image;
-      console.log(responImage)
+      // console.log(responImage)
       const respon = await postCategory({
         ...value,
-        image_url: responImage.image_url,
+        image_url: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Sign-check-icon.png/800px-Sign-check-icon.png",
       });
 
       if (!respon?.error) {
