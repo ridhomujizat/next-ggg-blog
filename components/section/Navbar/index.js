@@ -81,12 +81,12 @@ export default function Navbar({ currentLang, text }) {
               </>
             ) : (
               <>
-                <Link href="/login">
+                {/* <Link href="/login">
                   <Button variant="outline">{text.login}</Button>
                 </Link>
                 <Link href="/register">
                   <Button variant="outline">{text.register}</Button>
-                </Link>
+                </Link> */}
               </>
             )}
 
