@@ -54,6 +54,8 @@ export const getDetailBlog= async ({ id, data, type }) => {
 export const getDetailBySlugBlog = async ({ id, type }) => {
   const url = `/api/${CURRENT_API}/${id}`;
 
+  const URL1 = encodeURI(url);
+
   let params = {};
 
   if (type) {
@@ -61,7 +63,7 @@ export const getDetailBySlugBlog = async ({ id, type }) => {
   }
 
   return callAPI({
-    url,
+    url: URL1,
     method: "GET",
     params,
   });
