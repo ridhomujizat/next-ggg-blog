@@ -80,8 +80,8 @@ export default function Form(props) {
       // }
 
       // slug
-      value.slug_en = value.title_en.split(" ").join("-");
-      value.slug_idn = value.title_en.split(" ").join("-");
+      value.slug_en = value.title_en.split(" ").join("-").replaceAll("#","");
+      value.slug_idn = value.title_en.split(" ").join("-").replaceAll("#","");
 
       //category & value
       const valueLabels = value.array_id_labels
