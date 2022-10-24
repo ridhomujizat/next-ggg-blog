@@ -96,23 +96,23 @@ export default function Form(props) {
     onSubmit: async (value) => {
       setLoading(true);
       // HANDLE IMAGE UPLOAD
-      const f = new FormData();
-      f.append("photo", value.image[0]);
+      // const f = new FormData();
+      // f.append("photo", value.image[0]);
 
-      const responImage = await uploadImageBlog(f);
+      // const responImage = await uploadImageBlog(f);
       // IF IMAGE FAILED APLOAD;
-      if (!responImage?.error) {
-        value.image_url = responImage.image_url;
-      } else {
-        return toast({
-          position: "bottom-right",
-          title: "Failed to upload image.",
-          description: respon?.message ? respon?.message : "-",
-          status: "error",
-          duration: 6000,
-          isClosable: true,
-        });
-      }
+      // if (!responImage?.error) {
+      //   value.image_url = responImage.image_url;
+      // } else {
+      //   return toast({
+      //     position: "bottom-right",
+      //     title: "Failed to upload image.",
+      //     description: respon?.message ? respon?.message : "-",
+      //     status: "error",
+      //     duration: 6000,
+      //     isClosable: true,
+      //   });
+      // }
 
       //slug
       value.slug_en = value.title_en.split(" ").join("-");
@@ -166,6 +166,25 @@ export default function Form(props) {
     }),
   });
 
+  const postImage = async (val) => {
+    const f = new FormData();
+    f.append("photo", val[0]);
+    const responImage = await uploadImageBlog(f);
+
+    if (!responImage?.error) {
+      formik.setFieldValue("image_url", responImage.image_url);
+    } else {
+      return toast({
+        position: "bottom-right",
+        title: "Failed to upload image.",
+        description: respon?.message ? respon?.message : "-",
+        status: "error",
+        duration: 6000,
+        isClosable: true,
+      });
+    }
+  };
+
   return (
     <AdminLayout currentLang={props.currentLang} text={props.text}>
       <Text fontSize="2xl" fontWeight="bold" mb="2">
@@ -185,8 +204,8 @@ export default function Form(props) {
           <Flex justifyContent="center" p="4" gap="4" alignItems="center">
             <Image
               src={
-                formik.values?.image
-                  ? URL.createObjectURL(formik.values?.image[0])
+                formik.values?.image_url
+                  ? formik.values?.image_url
                   : "/image/img_empty.png"
               }
               maxH="200px"
@@ -197,9 +216,10 @@ export default function Form(props) {
               accept="image/* "
               type="file"
               name="image"
-              value={formik.values.image?.name}
+              // value={formik.values.image?.name}
               onChange={(e) => {
-                formik.setFieldValue("image", e.target.files);
+                postImage(e.target.files)
+                // formik.setFieldValue("image", e.target.files);
               }}
               onBlur={formik.handleBlur}
               isInvalid={formik.touched.image && Boolean(formik.errors.image)}

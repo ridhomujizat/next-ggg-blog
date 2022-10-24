@@ -34,7 +34,7 @@ export const getDetailCategory = async ({ id, data, type }) => {
 };
 
 export const postCategory = async (data) => {
-  const url = `https://apiblog.goodgamesguild.com/api/blogs/category-create`;
+  const url = `/api/blogs/category-create`;
 
   return callAPI({
     url,

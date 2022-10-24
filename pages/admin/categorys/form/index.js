@@ -19,7 +19,7 @@ import {
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import {  uploadImageCategory } from "service/category";
+import { uploadImageCategory } from "service/category";
 import { postCategory } from "service/post";
 import jwtDecode from "jwt-decode";
 
@@ -33,20 +33,12 @@ export default function Form(props) {
       category_name_idn: "",
       category_description_en: "",
       category_description_idn: "",
-      image: null,
+      image_url: null,
     },
     onSubmit: async (value) => {
       setLoading(true);
-      // HANDLE IMAGE UPLOAD
-      const f = new FormData();
-      f.append("photo", value.image[0]);
-
-      const responImage = await uploadImageCategory(f);
-      delete value.image;
-      // console.log(responImage)
       const respon = await postCategory({
         ...value,
-        image_url: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Sign-check-icon.png/800px-Sign-check-icon.png",
       });
 
       if (!respon?.error) {
@@ -72,7 +64,7 @@ export default function Form(props) {
       }
     },
     validationSchema: yup.object({
-      image: yup.mixed().required("Name is required"),
+      image_url: yup.string().required("Image is required"),
       category_name_en: yup.string().required("Name is required"),
       category_name_idn: yup.string().required("Name is required"),
       category_description_idn: yup
@@ -82,6 +74,12 @@ export default function Form(props) {
     }),
   });
 
+  const postImage = async (val) => {
+    const f = new FormData();
+    f.append("photo", val[0]);
+    const responImage = await uploadImageCategory(f);
+    formik.setFieldValue("image_url", responImage.image_url);
+  };
   return (
     <AdminLayout currentLang={props.currentLang} text={props.text}>
       <Text fontSize="2xl" fontWeight="bold" mb="2">
@@ -96,8 +94,8 @@ export default function Form(props) {
           <Flex justifyContent="center" p="4" gap="4" alignItems="center">
             <Image
               src={
-                formik.values?.image
-                  ? URL.createObjectURL(formik.values?.image[0])
+                formik.values?.image_url
+                  ? formik.values?.image_url
                   : "/image/img_empty.png"
               }
               maxH="200px"
@@ -108,10 +106,8 @@ export default function Form(props) {
               accept="image/* "
               type="file"
               name="image"
-              value={formik.values.image?.name}
               onChange={(e) => {
-               
-                formik.setFieldValue("image", e.target.files);
+                postImage( e.target.files)
               }}
               onBlur={formik.handleBlur}
               isInvalid={formik.touched.image && Boolean(formik.errors.image)}
