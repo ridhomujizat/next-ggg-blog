@@ -64,7 +64,7 @@ export default function Form(props) {
       }
     },
     validationSchema: yup.object({
-      image_url: yup.string().required("Image is required"),
+      // image_url: yup.string().required("Image is required"),
       category_name_en: yup.string().required("Name is required"),
       category_name_idn: yup.string().required("Name is required"),
       category_description_idn: yup
@@ -103,7 +103,7 @@ export default function Form(props) {
               maxW="50%"
             />
             <Input
-              accept="image/* "
+              accept=".svg"
               type="file"
               name="image"
               onChange={(e) => {
