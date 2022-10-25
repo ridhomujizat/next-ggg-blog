@@ -17,21 +17,24 @@ import Link from "next/link";
 import ModalDeleteItem from "components/Modal/ModalDeleteItem";
 import { getBlogs, deleteBlog, deleteImageCategory } from "service/post";
 import { MdOutlineEdit, MdDeleteOutline } from "react-icons/md";
+import Pagination from "components/Pagination";
 import jwtDecode from "jwt-decode";
 
 export default function Post(props) {
   const toast = useToast();
   const [modalDelete, setModalDelete] = useState({ open: false, id: null });
+  const [page, setPage] = useState(1);
+  const [totalData, setTotalData] = useState(0);
   const [data, setData] = useState([]);
   useEffect(() => {
     getData();
-  }, []);
+  }, [page]);
 
   const getData = async () => {
-    const respon = await getBlogs({ type: props.currentLang });
+    const respon = await getBlogs({ type: props.currentLang, page, limit: 5 });
     if (!respon?.error) {
-      const { blogs } = respon.data;
-
+      const { blogs, total_data } = respon.data;
+      setTotalData(total_data);
       setData(blogs);
     }
   };
@@ -143,6 +146,14 @@ export default function Post(props) {
           </Box>
         </Flex>
         <Table headCell={headCell} data={data} />
+        <Pagination
+          totalData={totalData}
+          current={page}
+          limit={5}
+          onChengePage={(e) => {
+            setPage(e);
+          }}
+        />
       </Stack>
       <ModalDeleteItem
         open={modalDelete.open}

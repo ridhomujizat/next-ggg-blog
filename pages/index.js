@@ -25,9 +25,10 @@ import { getBlogs } from "service/post";
 import { getCategorys } from "service/category";
 import { getLabels } from "service/labels";
 import moment from "moment";
+import Pagination from "components/Pagination";
 
 export default function Home(props) {
-  const { params, BlogList } = props;
+  const { params, BlogList, totalData } = props;
   const [valueSearch, setValueSearch] = React.useState("");
   const router = useRouter();
 
@@ -58,14 +59,6 @@ export default function Home(props) {
     return data;
   };
 
-  // const handleSearch = () => {
-  //   router.push({
-  //     query: {
-  //       search: valueSearch,
-  //       ...params,
-  //     },
-  //   });
-  // };
   const handleParams = (value) => {
     router.push({
       query: {
@@ -135,7 +128,10 @@ export default function Home(props) {
                               )[0]?.category_name
                             }
                           </Text>
-                          <Box cursor="pointer" onClick={() => removeParams('category')}>
+                          <Box
+                            cursor="pointer"
+                            onClick={() => removeParams("category")}
+                          >
                             <BsX size="25" />
                           </Box>
                         </Box>
@@ -152,7 +148,10 @@ export default function Home(props) {
                               )[0]?.label_name
                             }
                           </Text>
-                          <Box cursor="pointer" onClick={() => removeParams('label')}>
+                          <Box
+                            cursor="pointer"
+                            onClick={() => removeParams("label")}
+                          >
                             <BsX size="25" />
                           </Box>
                         </Box>
@@ -247,6 +246,18 @@ export default function Home(props) {
                 </GridItem>
               ))}
             </SimpleGrid>
+            <Box display="flex" justifyContent="center" py="50px">
+              <Pagination
+                current={parseInt(params.page)}
+                limit={parseInt(params.limit)}
+                totalData={totalData}
+                maxPageView={3}
+                onChengePage={(e) => {
+                  handleParams({ page: e });
+                }}
+              />
+            </Box>
+
             {/* <NextLink href="/?page=2">
               <h1>asdas</h1>
             </NextLink> */}
@@ -288,7 +299,7 @@ export async function getServerSideProps({ req, query }) {
     type: initialLang.currentLang,
   });
 
-  const { blogs } = respon.data;
+  const { blogs, total_data } = respon.data;
   return {
     props: {
       ...initialLang,
@@ -299,6 +310,7 @@ export async function getServerSideProps({ req, query }) {
       },
       // stickyBlog,
       BlogList: blogs,
+      totalData: total_data,
       categories: responseCat.data,
       labels: responseLabel.data,
     },
