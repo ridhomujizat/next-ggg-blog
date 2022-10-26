@@ -135,7 +135,7 @@ export default function Footer({ text }) {
     {
       id: "5",
       title: "Contact",
-      href: "/contact",
+      href: "https://goodgamesguild.com/contact",
     },
   ];
 

@@ -6,19 +6,48 @@ import {
   Box,
   Button,
   Text,
-  Link,
   IconButton,
   Image as ImageStyle,
+  Stack,
 } from "@chakra-ui/react";
 import { BsPersonFill } from "react-icons/bs";
 import Cookies from "js-cookie";
 import useAuthStore from "store/authStore";
+import Link from "next/link";
 const langList = ["en", "idn"];
 
 export default function Navbar({ currentLang, text }) {
   const router = useRouter();
   const { isLogin, user, setLogout } = useAuthStore((state) => state);
   const [auth, setAuth] = useState({ isLogin: false, user: null });
+
+  const navbarList = [
+    {
+      id: "1",
+      title: "Staking",
+      href: "https://staking.goodgamesguild.com/farms",
+    },
+    {
+      id: "2",
+      title: "Metakey",
+      href: "https://metakey.goodgamesguild.com/",
+    },
+    {
+      id: "3",
+      title: "Whitepaper",
+      href: "https://docs.goodgamesguild.com/",
+    },
+    {
+      id: "4",
+      title: "Campaign",
+      href: "https://goodgamesguild.com/gleam",
+    },
+    {
+      id: "5",
+      title: "Portal Blog",
+      href: "https://goodgamesguild.com/#",
+    },
+  ];
 
   useEffect(() => {
     setAuth({ isLogin, user });
@@ -57,6 +86,15 @@ export default function Navbar({ currentLang, text }) {
           </Link>
 
           <Box sx={sx.nav}>
+            <Stack direction="row" spacing={4}>
+              {navbarList.map((o) => (
+                <Box key={o.id}>
+                  <Link href={o.href}>
+                    <Text cursor="pointer">{o.title}</Text>
+                  </Link>
+                </Box>
+              ))}
+            </Stack>
             {auth.isLogin ? (
               <>
                 <Text fontWeight="bold">Hi, {auth.user.username}</Text>

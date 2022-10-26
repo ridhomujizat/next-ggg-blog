@@ -19,6 +19,7 @@ import {
   GridItem,
   IconButton,
   Image,
+  InputLeftElement,
 } from "@chakra-ui/react";
 import { BsSearch, BsX } from "react-icons/bs";
 import { getBlogs } from "service/post";
@@ -161,15 +162,16 @@ export default function Home(props) {
                 )}
 
                 <InputGroup maxW="600px">
-                  <InputRightElement>
+                  <InputLeftElement>
                     <IconButton
                       onClick={() => {
                         handleParams({ search: valueSearch });
                       }}
+                      background="transparent"
                     >
                       <BsSearch />
                     </IconButton>
-                  </InputRightElement>
+                  </InputLeftElement>
                   <Input
                     placeholder="Search Blog Post"
                     onChange={(e) => {
