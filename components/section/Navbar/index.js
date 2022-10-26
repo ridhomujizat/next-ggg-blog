@@ -9,11 +9,15 @@ import {
   IconButton,
   Image as ImageStyle,
   Stack,
+  Link,
+  Flex,
+  CloseButton,
 } from "@chakra-ui/react";
 import { BsPersonFill } from "react-icons/bs";
 import Cookies from "js-cookie";
 import useAuthStore from "store/authStore";
-import Link from "next/link";
+import { HamburgerIcon } from "@chakra-ui/icons";
+
 const langList = ["en", "idn"];
 
 export default function Navbar({ currentLang, text }) {
@@ -48,6 +52,8 @@ export default function Navbar({ currentLang, text }) {
       href: "https://goodgamesguild.com/#",
     },
   ];
+
+  const [changeDisplay, setChangeDisplay] = useState("none");
 
   useEffect(() => {
     setAuth({ isLogin, user });
@@ -84,9 +90,109 @@ export default function Navbar({ currentLang, text }) {
               height="41px"
             />
           </Link>
+          <Flex display={["none", "none", "flex"]}>
+            <Box sx={sx.nav}>
+              <Stack direction="row" spacing={4}>
+                {navbarList.map((o) => (
+                  <Box key={o.id}>
+                    <Link href={o.href}>
+                      <Text cursor="pointer">{o.title}</Text>
+                    </Link>
+                  </Box>
+                ))}
+              </Stack>
+              {auth.isLogin ? (
+                <>
+                  <Text fontWeight="bold">Hi, {auth.user.username}</Text>
+                  {auth.user?.image_url ? (
+                    <Link href="/profile">
+                      <Box>
+                        <ImageStyle
+                          src={auth.user.image_url}
+                          alt={auth.user.username}
+                          borderRadius="full"
+                          objectFit="cover"
+                          boxSize="50px"
+                        />
+                      </Box>
+                    </Link>
+                  ) : (
+                    <IconButton rounded="full">
+                      <BsPersonFill />
+                    </IconButton>
+                  )}
+                  <Button variant="outline" onClick={handleLogout}>
+                    {text.logout}
+                  </Button>
+                </>
+              ) : (
+                <>
+                  {/* <Link href="/login">
+                  <Button variant="outline">{text.login}</Button>
+                </Link>
+                <Link href="/register">
+                  <Button variant="outline">{text.register}</Button>
+                </Link> */}
+                </>
+              )}
 
-          <Box sx={sx.nav}>
-            <Stack direction="row" spacing={4}>
+              <Box sx={sx.lang}>
+                {langList.map((val, i) => (
+                  <React.Fragment key={i}>
+                    <Text
+                      as="b"
+                      sx={sx.textLang}
+                      key={i}
+                      cursor={val !== currentLang ? "pointer" : "default"}
+                      color={val === currentLang ? "inherit" : "#363636"}
+                      onClick={() => changeLang(val)}
+                    >
+                      {val}
+                    </Text>
+                    {i !== langList.length - 1 && <Text>|</Text>}
+                  </React.Fragment>
+                ))}
+              </Box>
+            </Box>
+          </Flex>
+          <IconButton
+            size="lg"
+            aria-label="Open Menu"
+            mr={2}
+            icon={<HamburgerIcon />}
+            display={["flex", "flex", "none"]}
+            onClick={() => setChangeDisplay("flex")}
+          />
+        </Box>
+        <Flex
+          flexDir="column"
+          background={"#0C0E17"}
+          w="100vw"
+          h="100vh"
+          zIndex={20}
+          pos="fixed"
+          top="0"
+          left="0"
+          overflowY="auto"
+          display={changeDisplay}
+        >
+          <Flex justify="flex-end">
+            <IconButton
+              mt={2}
+              mr={5}
+              aria-label="Close Menu"
+              size="lg"
+              icon={<CloseButton />}
+              onClick={() => setChangeDisplay("none")}
+            />
+          </Flex>
+          <Flex flexDir="column" align="center" justify="center">
+            <Stack
+              direction="column"
+              spacing={4}
+              justify="center"
+              align="center"
+            >
               {navbarList.map((o) => (
                 <Box key={o.id}>
                   <Link href={o.href}>
@@ -100,13 +206,15 @@ export default function Navbar({ currentLang, text }) {
                 <Text fontWeight="bold">Hi, {auth.user.username}</Text>
                 {auth.user?.image_url ? (
                   <Link href="/profile">
-                    <ImageStyle
-                      src={auth.user.image_url}
-                      alt={auth.user.username}
-                      borderRadius="full"
-                      objectFit="cover"
-                      boxSize="50px"
-                    />
+                    <Box>
+                      <ImageStyle
+                        src={auth.user.image_url}
+                        alt={auth.user.username}
+                        borderRadius="full"
+                        objectFit="cover"
+                        boxSize="50px"
+                      />
+                    </Box>
                   </Link>
                 ) : (
                   <IconButton rounded="full">
@@ -118,17 +226,10 @@ export default function Navbar({ currentLang, text }) {
                 </Button>
               </>
             ) : (
-              <>
-                {/* <Link href="/login">
-                  <Button variant="outline">{text.login}</Button>
-                </Link>
-                <Link href="/register">
-                  <Button variant="outline">{text.register}</Button>
-                </Link> */}
-              </>
+              <></>
             )}
 
-            <Box sx={sx.lang}>
+            <Box sx={sx.lang} mt={5}>
               {langList.map((val, i) => (
                 <React.Fragment key={i}>
                   <Text
@@ -145,8 +246,8 @@ export default function Navbar({ currentLang, text }) {
                 </React.Fragment>
               ))}
             </Box>
-          </Box>
-        </Box>
+          </Flex>
+        </Flex>
       </Container>
     </Box>
   );

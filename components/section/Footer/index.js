@@ -15,10 +15,7 @@ import {
   Flex,
   Divider,
 } from "@chakra-ui/react";
-import { FaInstagram, FaTwitter, FaYoutube, FaTelegram } from "react-icons/fa";
-import { IoLogoDiscord } from "react-icons/io5";
-import { TbBrandTelegram } from "react-icons/tb";
-import { BsMedium } from "react-icons/bs";
+import { useRef, useState, useLayoutEffect } from "react";
 import Image from "next/image";
 import IcTele from "assets/ic_telegram.png";
 import IcTwitter from "assets/ic_twitter.png";
@@ -142,69 +139,96 @@ export default function Footer({ text }) {
   const footerList = [
     {
       id: "1",
-      image: <Image src={IcFooter1} alt="footer1" w="40px" h="62" />,
+      image: <Image src={IcFooter1} alt="footer1" width="32px" height="45px" />,
     },
     {
       id: "2",
-      image: <Image src={IcFooter2} alt="footer2" w="40px" h="62" />,
+      image: <Image src={IcFooter2} alt="footer2" width="45px" height="45px" />,
     },
     {
       id: "3",
-      image: <Image src={IcFooter3} alt="footer3" w="40px" h="62" />,
+      image: <Image src={IcFooter3} alt="footer3" width="45px" height="45px" />,
     },
     {
       id: "4",
-      image: <Image src={IcFooter4} alt="footer4" w="40px" h="62" />,
+      image: <Image src={IcFooter4} alt="footer4" width="45px" height="45px" />,
     },
     {
       id: "5",
-      image: <Image src={IcFooter5} alt="footer5" w="40px" h="62" />,
+      image: <Image src={IcFooter5} alt="footer5" width="45px" height="45px" />,
     },
     {
       id: "6",
-      image: <Image src={IcSolana} alt="solana.png" w="40px" h="62" />,
+      image: (
+        <Image src={IcSolana} alt="solana.png" width="45px" height="45px" />
+      ),
     },
   ];
 
-  return (
-    <Box background="#1C2734">
-      <Container as={Stack} maxW="container.xl" py={5} background="#1C2734">
-        <SimpleGrid
-          templateColumns={{ sm: "1fr 1fr 2fr 0fr", md: "2fr 1fr 2fr 1fr" }}
-          spacing={4}
-        >
-          <Stack spacing={4}>
-            <Box>
-              <Image
-                src={"https://goodgamesguild.com/front/ggg/logo-with-text.png"}
-                alt="Picture of the author"
-                width="200px"
-                height="41px"
-              />
-            </Box>
+  const ref = useRef(null);
 
-            <Stack direction={"row"} spacing={6}>
-              {sosmedList.map((o) => (
-                <SocialButton key={o.id} label={o.label} href={o.href}>
-                  {o.icon}
-                </SocialButton>
-              ))}
-            </Stack>
-          </Stack>
-          <Stack align={"flex-start"}>
-            <ListHeader>{text.about}</ListHeader>
-            {aboutList.map((o) => (
-              <Link
-                key={o.id}
-                href={o.href}
-                fontWeight={"700"}
-                color="#FFFFFF"
-                opacity={0.7}
+  const [width, setWidth] = useState(0);
+
+  useLayoutEffect(() => {
+    setWidth(ref.current.offsetWidth);
+  }, []);
+
+  return (
+    <Box background="#1C2734" ref={ref}>
+      <Container as={Stack} maxW="container.xl" py={5} background="#1C2734">
+        {/* <SimpleGrid
+          templateColumns={{ sm: "1fr 1fr 2fr 0fr", md: "1fr 1fr 2fr 0fr" }}
+          spacing={4}
+        > */}
+        <Flex
+          flexDirection={["column", "column", "row"]}
+          spacing="4"
+          // flexWrap="wrap"
+          columnGap="4"
+          rowGap="4"
+        >
+          <Flex flex={1}>
+            <Stack spacing={4}>
+              <Box>
+                <Image
+                  src={
+                    "https://goodgamesguild.com/front/ggg/logo-with-text.png"
+                  }
+                  alt="Picture of the author"
+                  width="200px"
+                  height="41px"
+                />
+              </Box>
+
+              <Flex
+                flexDirection="row"
+                flexWrap="wrap"
+                columnGap={4}
+                rowGap={4}
               >
-                {o.title}
-              </Link>
-            ))}
-            {/* <Link href={"https://goodgamesguild.com/"} fontWeight={"700"}>
+                {sosmedList.map((o) => (
+                  <SocialButton key={o.id} label={o.label} href={o.href}>
+                    {o.icon}
+                  </SocialButton>
+                ))}
+              </Flex>
+            </Stack>
+          </Flex>
+          <Flex flex={0.5}>
+            <Stack align={"flex-start"}>
+              <ListHeader>{text.about}</ListHeader>
+              {aboutList.map((o) => (
+                <Link
+                  key={o.id}
+                  href={o.href}
+                  fontWeight={"700"}
+                  color="#FFFFFF"
+                  opacity={0.7}
+                >
+                  {o.title}
+                </Link>
+              ))}
+              {/* <Link href={"https://goodgamesguild.com/"} fontWeight={"700"}>
               Home
             </Link>
             <Link href={"https://blog.goodgamesguild.com/"} fontWeight={"700"}>
@@ -216,60 +240,88 @@ export default function Footer({ text }) {
             <Link href={"http://goodgameslabs.com/"} fontWeight={"700"}>
               Incubation
             </Link> */}
-          </Stack>
-          <Stack spacing="4">
-            <ListHeader>{text.subscribe}</ListHeader>
-            <InputGroup borderRadius="10px">
-              <Input
-                background="#D9D9D9"
-                color="black"
-                placeholder="Enter your email"
-                _placeholder={{ color: "black" }}
-                h="56px"
-              />
-              <InputRightElement w="120px" h="100%">
-                <Flex justify="center">
-                  <Button
-                    w="110px"
-                    h="39px"
-                    // bgGradient="linear(to-r,#1C2975, #AE28B0)"
-                    background="#DF21C0"
-                    _hover={{
-                      background: "#DF21C0",
-                      opacity: 0.8,
-                    }}
-                  >
-                    Submit
-                  </Button>
-                </Flex>
-              </InputRightElement>
-            </InputGroup>
-            <Stack spacing="4">
-              <Center>
-                <Text color="#CF00CA" fontWeight="semibold">
-                  A Decentralised Metaverse
-                </Text>
-              </Center>
-              <Center>
-                <Text color="#CF00CA" fontWeight="light" fontStyle="italic">
-                  Powering Multi-chain GameFi Ecosystem
-                </Text>
-              </Center>
-              <Center>
-                <Stack direction="row" spacing="4">
-                  {footerList.map((o) => (
-                    <Box cursor="pointer" key={o.id}>
-                      {o.image}
-                    </Box>
-                  ))}
-                </Stack>
-              </Center>
             </Stack>
-            {/* <Link href={"#"} fontWeight={"700"}>
+          </Flex>
+          <Flex flex={2}>
+            <Stack spacing="4">
+              <ListHeader>{text.subscribe}</ListHeader>
+              {width > 480 ? (
+                <InputGroup borderRadius="10px">
+                  <Input
+                    background="#D9D9D9"
+                    color="black"
+                    placeholder="Enter your email"
+                    _placeholder={{ color: "black" }}
+                    h="56px"
+                  />
+                  <InputRightElement w="120px" h="100%">
+                    <Flex justify="center">
+                      <Button
+                        w="110px"
+                        h="39px"
+                        // bgGradient="linear(to-r,#1C2975, #AE28B0)"
+                        background="#DF21C0"
+                        _hover={{
+                          background: "#DF21C0",
+                          opacity: 0.8,
+                        }}
+                      >
+                        Submit
+                      </Button>
+                    </Flex>
+                  </InputRightElement>
+                </InputGroup>
+              ) : (
+                <InputGroup borderRadius="10px">
+                  <Stack>
+                    <Input
+                      background="#D9D9D9"
+                      color="black"
+                      placeholder="Enter your email"
+                      _placeholder={{ color: "black" }}
+                      h="56px"
+                    />
+                    <Flex justify="center">
+                      <Button
+                        w="110px"
+                        h="39px"
+                        // bgGradient="linear(to-r,#1C2975, #AE28B0)"
+                        background="#DF21C0"
+                        _hover={{
+                          background: "#DF21C0",
+                          opacity: 0.8,
+                        }}
+                      >
+                        Submit
+                      </Button>
+                    </Flex>
+                  </Stack>
+                </InputGroup>
+              )}
+              <Stack spacing="4">
+                <Center>
+                  <Text color="#CF00CA" fontWeight="semibold">
+                    A Decentralised Metaverse
+                  </Text>
+                </Center>
+                <Center>
+                  <Text color="#CF00CA" fontWeight="light" fontStyle="italic">
+                    Powering Multi-chain GameFi Ecosystem
+                  </Text>
+                </Center>
+                <Center>
+                  <Stack direction="row" gap="5" width="100%">
+                    {footerList.map((o) => o.image)}
+                  </Stack>
+                </Center>
+              </Stack>
+              {/* <Link href={"#"} fontWeight={"700"}>
               Customer Support
             </Link> */}
-          </Stack>
-        </SimpleGrid>
+            </Stack>
+          </Flex>
+        </Flex>
+        {/* </SimpleGrid> */}
         <Box>
           <Center>
             <Stack spacing="4" width="70%">
