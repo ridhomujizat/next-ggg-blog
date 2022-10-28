@@ -134,7 +134,7 @@ export default function Blog(props) {
             <BlogStyled>
               <Output data={JSON.parse(blog.content)} />
             </BlogStyled>
-            <Box my="20px">
+            {/* <Box my="20px">
               <Text mb="10px" fontWeight="bold" fontSize="15px">
                 Category
               </Text>
@@ -145,7 +145,7 @@ export default function Blog(props) {
                 title={blog?.category_blog?.category_name}
                 imageUrl={blog?.category_blog?.image_url}
               />
-            </Box>
+            </Box> */}
             {/* ICON SHARE  */}
             <Box my="20px">
               <IconShare text={props.text.home.share} />
