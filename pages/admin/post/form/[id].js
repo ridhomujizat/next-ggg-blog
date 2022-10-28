@@ -27,7 +27,10 @@ import { getCategorys } from "service/category";
 import { Select } from "chakra-react-select";
 import moment from "moment";
 import useAuthStore from "store/authStore";
+import previewStore from "store/previewStore";
 import jwtDecode from "jwt-decode";
+import { BsEye } from "react-icons/bs";
+
 
 const CustomEditor = dynamic(() => import("components/RichEditor"), {
   ssr: false,
@@ -51,10 +54,12 @@ const value = {
   meta_description_en: "",
   category_id: [],
   array_id_labels: [],
+  status: "create", // true | draft | preview
 };
 
 export default function Form(props) {
   const stateAuth = useAuthStore((state) => state);
+  const preview = previewStore((state) => state);
   const [labels, setLabels] = useState([]);
   const [categorys, setCategorys] = useState([]);
   const [type, setType] = useState("en");
@@ -69,36 +74,32 @@ export default function Form(props) {
     initialValues: initialValue,
     onSubmit: async (value) => {
       setLoading(true);
-
-      // if (value.image) {
-      //   const f = new FormData();
-      //   f.append("photo", value.image[0]);
-
-      //   const responImage = await uploadImageCategory(f);
-      //   delete value.image;
-      //   value.image_url = responImage.image_url;
-      // }
-
-      // slug
-      value.slug_en = value.title_en.split(" ").join("-").replaceAll("#","");
-      value.slug_idn = value.title_en.split(" ").join("-").replaceAll("#","");
+      value.slug_en = value.title_en.split(" ").join("-").replaceAll("#", "");
+      value.slug_idn = value.title_en.split(" ").join("-").replaceAll("#", "");
 
       //category & value
       const valueLabels = value.array_id_labels
         .map((val) => val.value)
         .join(",");
       const valueCategory = value.category_id[0].value;
-      // return console.log(value)
+
+      const data = {
+        ...value,
+        category_id: valueCategory,
+        array_id_labels: '2',
+        date: moment().format("YYYY-MM-DD HH:mm:ss"),
+      };
+
+      if (data.status === "preview") {
+        preview.setNew(data);
+        return window
+          .open(window.location.origin + "/preview", "_blank")
+          .focus();
+      }
+
       const respon = await updateBlog({
         id,
-        data: {
-          ...value,
-          category_id: valueCategory,
-          array_id_labels: valueLabels,
-          date: moment().format("YYYY-MM-DD HH:mm:ss"),
-
-          // date: moment().format("YYYY-MM-DD HH:mm:ss  "),
-        },
+        data,
       });
 
       if (!respon?.error) {
@@ -125,13 +126,12 @@ export default function Form(props) {
       }
     },
     validationSchema: yup.object({
-      //   image: yup.mixed().required("Name is required"),
-      //   category_name_en: yup.string().required("Name is required"),
-      //   category_name_idn: yup.string().required("Name is required"),
-      //   category_description_idn: yup
-      //     .string()
-      //     .required("Description is required"),
-      //   category_description_en: yup.string().required("Description is required"),
+      image_url: yup.mixed().required("Image is required"),
+      content_idn: yup.string().required("Content en is required"),
+      content_en: yup.string().required("Content idn is required"),
+      title_idn: yup.string().required("Title idn is required"),
+      title_en: yup.string().required("Title idn is required"),
+      category_id: yup.mixed().required("Category is required"),
     }),
     enableReinitialize: true,
   });
@@ -247,7 +247,7 @@ export default function Form(props) {
               // value={formik.values?.image?.name}
               onChange={(e) => {
                 // formik.setFieldValue("image", e.target.files);
-                postImage(e.target.files)
+                postImage(e.target.files);
               }}
               onBlur={formik.handleBlur}
               isInvalid={formik.touched.image && Boolean(formik.errors.image)}
@@ -394,8 +394,38 @@ export default function Form(props) {
           </TabPanels>
         </Tabs>
 
-        <Flex justifyContent="flex-end" p="4">
-          <Button type="submit" disabled={!formik.isValid}>
+        <Flex justifyContent="flex-end" p="4" gap="15px">
+          <Button
+            type="submit"
+            disabled={!formik.isValid}
+            leftIcon={<BsEye />}
+            onClick={() => {
+              formik.setFieldValue("status", "preview");
+              formik.handleSubmit();
+            }}
+          >
+            preview
+          </Button>
+          <Button
+            type="submit"
+            disabled={!formik.isValid}
+            colorScheme="yellow"
+            onClick={() => {
+              formik.setFieldValue("status", "draft");
+              formik.handleSubmit();
+            }}
+          >
+            draft
+          </Button>
+          <Button
+            type="submit"
+            disabled={!formik.isValid}
+            colorScheme="green"
+            onClick={() => {
+              formik.setFieldValue("status", "true");
+              formik.handleSubmit();
+            }}
+          >
             Save
           </Button>
         </Flex>

@@ -9,6 +9,8 @@ import ImageTool from "@editorjs/image";
 import Checklist from "@editorjs/checklist";
 import List from "@editorjs/list";
 import Quote from "@editorjs/quote";
+// import YoutubeEmbed from "editorjs-youtube-embed";
+import Embed from "@editorjs/embed";
 import CodeTool from "@editorjs/code";
 import { StyleInlineTool } from "editorjs-style";
 import Tooltip from "editorjs-tooltip";
@@ -109,6 +111,16 @@ const CustomEditor = (props) => {
           },
         },
 
+        embed: {
+          class: Embed,
+          config: {
+            services: {
+              youtube: true,
+              coub: true,
+            }
+          }
+        },
+
         raw: RawTool,
         linkTool: LinkTool,
         image: {
@@ -149,6 +161,7 @@ const CustomEditor = (props) => {
             captionPlaceholder: "Quote's author",
           },
         },
+        // youtubeEmbed: YoutubeEmbed,
         code: {
           class: CodeTool,
           inlineToolbar: true,

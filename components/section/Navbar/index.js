@@ -13,7 +13,7 @@ import {
   Flex,
   CloseButton,
 } from "@chakra-ui/react";
-import { BsPersonFill } from "react-icons/bs";
+import { BsPersonFill, BsX } from "react-icons/bs";
 import Cookies from "js-cookie";
 import useAuthStore from "store/authStore";
 import { HamburgerIcon } from "@chakra-ui/icons";
@@ -176,77 +176,79 @@ export default function Navbar({ currentLang, text }) {
           overflowY="auto"
           display={changeDisplay}
         >
-          <Flex justify="flex-end">
-            <IconButton
-              mt={2}
-              mr={5}
-              aria-label="Close Menu"
-              size="lg"
-              icon={<CloseButton />}
-              onClick={() => setChangeDisplay("none")}
-            />
-          </Flex>
-          <Flex flexDir="column" align="center" justify="center">
-            <Stack
-              direction="column"
-              spacing={4}
-              justify="center"
-              align="center"
-            >
-              {navbarList.map((o) => (
-                <Box key={o.id}>
-                  <Link href={o.href}>
-                    <Text cursor="pointer">{o.title}</Text>
-                  </Link>
-                </Box>
-              ))}
-            </Stack>
-            {auth.isLogin ? (
-              <>
-                <Text fontWeight="bold">Hi, {auth.user.username}</Text>
-                {auth.user?.image_url ? (
-                  <Link href="/profile">
-                    <Box>
-                      <ImageStyle
-                        src={auth.user.image_url}
-                        alt={auth.user.username}
-                        borderRadius="full"
-                        objectFit="cover"
-                        boxSize="50px"
-                      />
-                    </Box>
-                  </Link>
-                ) : (
-                  <IconButton rounded="full">
-                    <BsPersonFill />
-                  </IconButton>
-                )}
-                <Button variant="outline" onClick={handleLogout}>
-                  {text.logout}
-                </Button>
-              </>
-            ) : (
-              <></>
-            )}
+          <div>
+            <Flex justify="flex-end">
+              <IconButton
+                mt={2}
+                mr={5}
+                aria-label="Close Menu"
+                size="lg"
+                icon={<BsX />}
+                onClick={() => setChangeDisplay("none")}
+              />
+            </Flex>
+            <Flex flexDir="column" align="center" justify="center">
+              <Stack
+                direction="column"
+                spacing={4}
+                justify="center"
+                align="center"
+              >
+                {navbarList.map((o) => (
+                  <Box key={o.id}>
+                    <Link href={o.href}>
+                      <Text cursor="pointer">{o.title}</Text>
+                    </Link>
+                  </Box>
+                ))}
+              </Stack>
+              {auth.isLogin ? (
+                <>
+                  <Text fontWeight="bold">Hi, {auth.user.username}</Text>
+                  {auth.user?.image_url ? (
+                    <Link href="/profile">
+                      <Box>
+                        <ImageStyle
+                          src={auth.user.image_url}
+                          alt={auth.user.username}
+                          borderRadius="full"
+                          objectFit="cover"
+                          boxSize="50px"
+                        />
+                      </Box>
+                    </Link>
+                  ) : (
+                    <IconButton rounded="full">
+                      <BsPersonFill />
+                    </IconButton>
+                  )}
+                  <Button variant="outline" onClick={handleLogout}>
+                    {text.logout}
+                  </Button>
+                </>
+              ) : (
+                <></>
+              )}
 
-            <Box sx={sx.lang} mt={5}>
-              {langList.map((val, i) => (
-                <React.Fragment key={i}>
-                  <Text
-                    as="b"
-                    sx={sx.textLang}
-                    key={i}
-                    cursor={val !== currentLang ? "pointer" : "default"}
-                    color={val === currentLang ? "inherit" : "#363636"}
-                    onClick={() => changeLang(val)}
-                  >
-                    {val}
-                  </Text>
-                  {i !== langList.length - 1 && <Text>|</Text>}
-                </React.Fragment>
-              ))}
-            </Box>
-          </Flex>
+              <Box sx={sx.lang} mt={5}>
+                {langList.map((val, i) => (
+                  <React.Fragment key={i}>
+                    <Text
+                      as="b"
+                      sx={sx.textLang}
+                      key={i}
+                      cursor={val !== currentLang ? "pointer" : "default"}
+                      color={val === currentLang ? "inherit" : "#363636"}
+                      onClick={() => changeLang(val)}
+                    >
+                      {val}
+                    </Text>
+                    {i !== langList.length - 1 && <Text>|</Text>}
+                  </React.Fragment>
+                ))}
+              </Box>
+            </Flex>
+          </div>
         </Flex>
       </Container>
     </Box>

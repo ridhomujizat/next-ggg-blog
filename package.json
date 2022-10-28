@@ -11,6 +11,7 @@
   "dependencies": {
     "@chakra-ui/react": "^2.3.4",
     "@editorjs/editorjs": "^2.25.0",
+    "@editorjs/embed": "^2.5.3",
     "@editorjs/header": "^2.6.2",
     "@editorjs/list": "^1.7.0",
     "@emotion/react": "^11",
@@ -22,6 +23,7 @@
     "editorjs-react-renderer": "^3.4.0",
     "editorjs-style": "^3.0.3",
     "editorjs-tooltip": "^1.1.8",
+    "editorjs-youtube-embed": "^1.0.3",
     "formik": "^2.2.9",
     "framer-motion": "^6",
     "js-cookie": "^3.0.1",

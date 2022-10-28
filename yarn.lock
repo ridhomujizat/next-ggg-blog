@@ -846,6 +846,11 @@
     codex-tooltip "^1.0.5"
     nanoid "^3.1.22"
 
+"@editorjs/embed@^2.5.3":
+  version "2.5.3"
+  resolved "https://registry.yarnpkg.com/@editorjs/embed/-/embed-2.5.3.tgz#83a9e2fa74f065ba90863b34e1dcc21389cb83da"
+  integrity sha512-+X0xX2tiwQjU/B2rPDv8DOwg0suiqrt2h/o9frjR308YuY1VTpqjLRF1lIV4TmelQyVr9cXkZruaa4Ty1wvfJg==
+
 "@editorjs/header@^2.6.2":
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/@editorjs/header/-/header-2.6.2.tgz#523b6dda72ff882e53f64325840ee7bfc68ee6b7"
@@ -1866,6 +1871,11 @@ editorjs-tooltip@^1.1.8:
   version "1.1.8"
   resolved "https://registry.yarnpkg.com/editorjs-tooltip/-/editorjs-tooltip-1.1.8.tgz#7df363c5f9763fded18499681656bc1f00aac784"
   integrity sha512-r8QHVIUqvqevKmh0WOXyJwhDeJK0aZXi7+07+k/ZavUSEFNnjQ4YnICQhIZqDibKO9llEeTICzHlLvuwyZjrZw==
+
+editorjs-youtube-embed@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/editorjs-youtube-embed/-/editorjs-youtube-embed-1.0.3.tgz#ed54250e0a9501197ccbba0bad35ff48a452f6c1"
+  integrity sha512-0jhveTlXpM8BkltqChhk5Co+cTQvyGk0aKgAiCgCRv7VJDDujHHaNyBLSzL3QLAVs7f7kcYdYQscwhLFZWJivA==
 
 emoji-regex@^9.2.2:
   version "9.2.2"

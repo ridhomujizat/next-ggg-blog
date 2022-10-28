@@ -27,7 +27,9 @@ import { getCategorys } from "service/category";
 import { Select } from "chakra-react-select";
 import moment from "moment";
 import useAuthStore from "store/authStore";
+import previewStore from "store/previewStore";
 import jwtDecode from "jwt-decode";
+import { BsEye } from "react-icons/bs";
 
 const CustomEditor = dynamic(() => import("components/RichEditor"), {
   ssr: false,
@@ -39,6 +41,7 @@ const CustomEditor = dynamic(() => import("components/RichEditor"), {
 
 export default function Form(props) {
   const stateAuth = useAuthStore((state) => state);
+  const preview = previewStore((state) => state);
   const [labels, setLabels] = useState([]);
   const [categorys, setCategorys] = useState([]);
   const [type, setType] = useState("en");
@@ -46,6 +49,7 @@ export default function Form(props) {
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     setAuth(stateAuth.user);
+    formik.setFieldValue("author",stateAuth.user.username)
     getAdditionalData();
   }, []);
 
@@ -92,31 +96,12 @@ export default function Form(props) {
       date: Date.now(),
       category_id: [],
       array_id_labels: [],
+      status: "create", // true | draft | preview
     },
     onSubmit: async (value) => {
       setLoading(true);
-      // HANDLE IMAGE UPLOAD
-      // const f = new FormData();
-      // f.append("photo", value.image[0]);
-
-      // const responImage = await uploadImageBlog(f);
-      // IF IMAGE FAILED APLOAD;
-      // if (!responImage?.error) {
-      //   value.image_url = responImage.image_url;
-      // } else {
-      //   return toast({
-      //     position: "bottom-right",
-      //     title: "Failed to upload image.",
-      //     description: respon?.message ? respon?.message : "-",
-      //     status: "error",
-      //     duration: 6000,
-      //     isClosable: true,
-      //   });
-      // }
-
-      //slug
-      value.slug_en = value.title_en.split(" ").join("-").replaceAll("#","");
-      value.slug_idn = value.title_en.split(" ").join("-").replaceAll("#","");
+      value.slug_en = value.title_en.split(" ").join("-").replaceAll("#", "");
+      value.slug_idn = value.title_en.split(" ").join("-").replaceAll("#", "");
 
       const valueLabels = value.array_id_labels
         .map((val) => val.value)
@@ -125,12 +110,22 @@ export default function Form(props) {
 
       const { image, ...payload } = value;
 
-      const respon = await postBlog({
+      const data = {
         ...payload,
         category_id: valueCategory,
-        array_id_labels: valueLabels,
-        date: moment().format("YYYY-MM-DD HH:mm:ss  "),
-      });
+        array_id_labels: '2,1',
+        date: moment().format("YYYY-MM-DD HH:mm:ss"),
+      };
+
+      // return console.log(data);
+
+      if (data.status === "preview") {
+        preview.setNew(data);
+        return window
+          .open(window.location.origin + "/preview", "_blank")
+          .focus();
+      }
+      const respon = await postBlog(data);
 
       if (!respon?.error) {
         delete value.image;
@@ -156,13 +151,12 @@ export default function Form(props) {
       }
     },
     validationSchema: yup.object({
-      //   image: yup.mixed().required("Name is required"),
-      //   category_name_en: yup.string().required("Name is required"),
-      //   category_name_idn: yup.string().required("Name is required"),
-      //   category_description_idn: yup
-      //     .string()
-      //     .required("Description is required"),
-      //   category_description_en: yup.string().required("Description is required"),
+      image_url: yup.mixed().required("Image is required"),
+      content_idn: yup.string().required("Content en is required"),
+      content_en: yup.string().required("Content idn is required"),
+      title_idn: yup.string().required("Title idn is required"),
+      title_en: yup.string().required("Title idn is required"),
+      category_id: yup.mixed().required("Category is required"),
     }),
   });
 
@@ -209,7 +203,7 @@ export default function Form(props) {
                   : "/image/img_empty.png"
               }
               maxH="200px"
-              alt="image-category"
+              alt="image"
               maxW="50%"
             />
             <Input
@@ -218,14 +212,14 @@ export default function Form(props) {
               name="image"
               // value={formik.values.image?.name}
               onChange={(e) => {
-                postImage(e.target.files)
+                postImage(e.target.files);
                 // formik.setFieldValue("image", e.target.files);
               }}
               onBlur={formik.handleBlur}
               isInvalid={formik.touched.image && Boolean(formik.errors.image)}
             />
           </Flex>
-          <Flex p="4">
+          {/* <Flex p="4">
             <Stack spacing={2} w="100%">
               <Text>Labels</Text>
               <Select
@@ -240,7 +234,7 @@ export default function Form(props) {
                 }}
               />
             </Stack>
-          </Flex>
+          </Flex> */}
           <Flex p="4">
             <Stack spacing={2} w="100%">
               <Text>Category</Text>
@@ -362,8 +356,38 @@ export default function Form(props) {
           </TabPanels>
         </Tabs>
 
-        <Flex justifyContent="flex-end" p="4">
-          <Button type="submit" disabled={!formik.isValid}>
+        <Flex justifyContent="flex-end" p="4" gap="15px">
+          <Button
+            type="submit"
+            disabled={!formik.isValid}
+            leftIcon={<BsEye />}
+            onClick={() => {
+              formik.setFieldValue("status", "preview");
+              formik.handleSubmit();
+            }}
+          >
+            preview
+          </Button>
+          <Button
+            type="submit"
+            disabled={!formik.isValid}
+            colorScheme="yellow"
+            onClick={() => {
+              formik.setFieldValue("status", "draft");
+              formik.handleSubmit();
+            }}
+          >
+            draft
+          </Button>
+          <Button
+            type="submit"
+            disabled={!formik.isValid}
+            colorScheme="green"
+            onClick={() => {
+              formik.setFieldValue("status", "true");
+              formik.handleSubmit();
+            }}
+          >
             Save
           </Button>
         </Flex>

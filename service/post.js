@@ -1,7 +1,15 @@
 import callAPI from "config/callAPI";
 const CURRENT_API = "blogs";
 
-export const getBlogs = async ({ type, limit, page, label, category }) => {
+export const getBlogs = async ({
+  type,
+  limit,
+  page,
+  label,
+  category,
+  search,
+  status
+}) => {
   const url = `/api/${CURRENT_API}`;
   let params = {};
 
@@ -25,6 +33,12 @@ export const getBlogs = async ({ type, limit, page, label, category }) => {
     params = { ...params, category_id: category };
   }
 
+  if (search) {
+    params = { ...params, search: search };
+  }
+  if (status === 'draft') {
+    url = url + '/draft'
+  }
 
   return callAPI({
     url,
@@ -33,7 +47,7 @@ export const getBlogs = async ({ type, limit, page, label, category }) => {
   });
 };
 
-export const getDetailBlog= async ({ id, data, type }) => {
+export const getDetailBlog = async ({ id, data, type }) => {
   const url = `/api/${CURRENT_API}/detail/${id}`;
 
   let params = {};
@@ -47,7 +61,7 @@ export const getDetailBlog= async ({ id, data, type }) => {
     method: "GET",
     data,
     params,
-    token: true
+    token: true,
   });
 };
 
@@ -69,7 +83,7 @@ export const getDetailBySlugBlog = async ({ id, type }) => {
   });
 };
 
-export const postBlog= async (data) => {
+export const postBlog = async (data) => {
   const url = `/api/${CURRENT_API}/create`;
 
   return callAPI({
@@ -80,7 +94,7 @@ export const postBlog= async (data) => {
   });
 };
 
-export const deleteBlog= async ({ id, data }) => {
+export const deleteBlog = async ({ id, data }) => {
   const url = `/api/${CURRENT_API}/${id}`;
 
   return callAPI({
@@ -91,7 +105,7 @@ export const deleteBlog= async ({ id, data }) => {
   });
 };
 
-export const updateBlog= async ({ id, data }) => {
+export const updateBlog = async ({ id, data }) => {
   const url = `/api/${CURRENT_API}/${id}`;
 
   return callAPI({
@@ -113,7 +127,7 @@ export const uploadImageBlog = async (data) => {
   });
 };
 
-export const deleteImageBlog= async (data) => {
+export const deleteImageBlog = async (data) => {
   const url = `/api/images/${CURRENT_API}/upload`;
 
   return callAPI({

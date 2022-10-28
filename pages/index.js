@@ -161,7 +161,14 @@ export default function Home(props) {
                   </Box>
                 )}
 
-                <InputGroup maxW="600px">
+                <InputGroup
+                  maxW="600px"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleParams({ search: valueSearch });
+                    }
+                  }}
+                >
                   <InputLeftElement>
                     <IconButton
                       onClick={() => {
@@ -234,17 +241,18 @@ export default function Home(props) {
                 </SimpleGrid>
               </Box>
             </SimpleGrid>
-            {/* Second GRDI */}
+            {/* Second GRID */}
 
-            <SimpleGrid columns={[1, null, null, 4]} gap={10} mt={20}>
-              {listColumn()?.map((o, i) => (
+            <SimpleGrid columns={[1, null, null, 3]} gap={10} mt={20}>
+              {listColumn()?.map((val, i) => (
                 <GridItem key={i}>
-                  <Thumbnail
-                    key={String(i)}
-                    title="Ikuti Misi Dari Metabank GGG # Rekomendasi"
-                    imageUrl="bg.jpg"
-                    date={"16 Agu 2022  "}
-                  />
+                    <Thumbnail
+                      slug={val.slug}
+                      key={String(i)}
+                      title={val.title}
+                      date={moment(val.date).format("DD MMM YYYY")}
+                      imageUrl={val.image_url}
+                    />
                 </GridItem>
               ))}
             </SimpleGrid>

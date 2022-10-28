@@ -30,6 +30,21 @@ export default function TableComp({ headCell, data }) {
           </Tr>
         </Thead>
         <Tbody>
+
+          {data?.length === 0 && (
+            <Tr>
+              <Td
+                colSpan={headCell.length}
+                borderColor="white"
+                color="white"
+                fontSize="md"
+                textAlign="center"
+                height="200px"
+              >
+                No Data
+              </Td>
+            </Tr>
+          )}
           {data.map((val, i) => (
             <Tr key={i}>
               {headCell.map((v) => (
