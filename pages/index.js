@@ -206,23 +206,25 @@ export default function Home(props) {
               {/* STICKY POST  */}
               {stickyPost()?.map((val) => (
                 <NextLink href={`/blog/${val.slug}`} key={val.id}>
-                  <Box cursor="pointer">
-                    <Box
-                      w="100%"
-                      height={["358px", "205px", "350px", "350px"]}
-                      border="0.5px solid #FFFFFF"
-                      borderRadius={20}
-                      as="img"
-                      objectFit="cover"
-                      src={val.image_url}
-                    ></Box>
-                    <Spacer h={10} />
+                  <a>
+                    <Box cursor="pointer">
+                      <Box
+                        w="100%"
+                        height={["358px", "205px", "350px", "350px"]}
+                        border="0.5px solid #FFFFFF"
+                        borderRadius={20}
+                        as="img"
+                        objectFit="cover"
+                        src={val.image_url}
+                      ></Box>
+                      <Spacer h={10} />
 
-                    <Text fontSize="4xl" fontWeight="700">
-                      {val.title}
-                    </Text>
-                    <Text>{moment(val.date).format("DD MMM YYYY")}</Text>
-                  </Box>
+                      <Text fontSize="4xl" fontWeight="700">
+                        {val.title}
+                      </Text>
+                      <Text>{moment(val.date).format("DD MMM YYYY")}</Text>
+                    </Box>
+                  </a>
                 </NextLink>
               ))}
 
@@ -243,17 +245,17 @@ export default function Home(props) {
             </SimpleGrid>
             {/* Second GRID */}
             <Box marginTop="60" />
-            <SimpleGrid columns={[1, null, null, 3]} gap={10} >
+            <SimpleGrid columns={[1, null, null, 3]} gap={10}>
               {listColumn()?.map((val, i) => (
                 <GridItem key={i}>
-                    <Thumbnail
-                      slug={val.slug}
-                      key={String(i)}
-                      title={val.title}
-                      date={moment(val.date).format("DD MMM YYYY")}
-                      imageUrl={val.image_url}
-                      height={["200px", "205px", "350px", "190px"]}
-                    />
+                  <Thumbnail
+                    slug={val.slug}
+                    key={String(i)}
+                    title={val.title}
+                    date={moment(val.date).format("DD MMM YYYY")}
+                    imageUrl={val.image_url}
+                    height={["200px", "205px", "350px", "190px"]}
+                  />
                 </GridItem>
               ))}
             </SimpleGrid>
