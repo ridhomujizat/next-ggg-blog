@@ -6,7 +6,7 @@ export default function Home3(props) {
   return (
     <Stack spacing={4} py={4} mt={[10, null]}>
       <Stack spacing={4}>
-        <Text as="h1" fontSize={["2xl", "3xl", "4xl"]} fontWeight="bold">
+        <Text as="h1" fontSize={["2xl", "2xl", "3xl"]} fontWeight="bold">
           {props.text.categories}
         </Text>
         <Wrap spacing="50px">

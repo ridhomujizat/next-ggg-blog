@@ -53,7 +53,7 @@ export default function Home(props) {
   const listColumn = () => {
     let data = [];
     if (params.page == 1) {
-      data = props.BlogList?.slice(6, data.length + 1);
+      data = props.BlogList?.slice(5, props.BlogList.length + 1);
     } else {
       data = props.BlogList;
     }
@@ -242,8 +242,8 @@ export default function Home(props) {
               </Box>
             </SimpleGrid>
             {/* Second GRID */}
-
-            <SimpleGrid columns={[1, null, null, 3]} gap={10} mt={20}>
+            <Box marginTop="60" />
+            <SimpleGrid columns={[1, null, null, 3]} gap={10} >
               {listColumn()?.map((val, i) => (
                 <GridItem key={i}>
                     <Thumbnail
@@ -252,6 +252,7 @@ export default function Home(props) {
                       title={val.title}
                       date={moment(val.date).format("DD MMM YYYY")}
                       imageUrl={val.image_url}
+                      height={["200px", "205px", "350px", "190px"]}
                     />
                 </GridItem>
               ))}
