@@ -64,7 +64,6 @@ const CustomEditor = (props) => {
       form_data.append("photo", file);
       const imageUrl = await CloudImage(form_data);
       if (imageUrl) {
-        console.log(imageUrl);
 
         return imageUrl;
       } else {

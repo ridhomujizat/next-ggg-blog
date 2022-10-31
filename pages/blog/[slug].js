@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
+import readingTime from "reading-time";
 
 import {
   Text,
@@ -42,7 +43,7 @@ const BlogStyled = styled(Box)`
 
 export default function Blog(props) {
   const router = useRouter();
-  const { blog } = props;
+  const { blog, readTime } = props;
   const [page, setPage] = useState(1);
   const [listData, setListData] = useState({ blogs: [], total_data: 0 });
 
@@ -115,6 +116,15 @@ export default function Blog(props) {
                 </Text>
                 <Text color="gray.700" fontSize="sm">
                   {blog.author}
+                </Text>
+              </Box>
+              <Box height="40px" borderRight="#fff solid 1px" />
+              <Box>
+                <Text fontSize="md" fontWeight="bold">
+                  Read Time
+                </Text>
+                <Text color="gray.700" fontSize="sm">
+                  {readTime}
                 </Text>
               </Box>
             </Box>
@@ -248,10 +258,14 @@ export async function getServerSideProps({ req, params }) {
       },
     };
   }
+
+  const readTime = readingTime(respon.data?.content ?? "", { wordsPerMinute: 500 });
+
   return {
     props: {
       ...initialLang,
       blog: respon.data,
+      readTime: readTime.text,
     },
   };
 }

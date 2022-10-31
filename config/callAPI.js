@@ -46,7 +46,6 @@ export default async function callAPI({
     const res = response?.data;
     return res;
   } catch (error) {
-    console.log(error)
     const res = {
       error: true,
       message: error?.message ? error.message : "Network error please try again",

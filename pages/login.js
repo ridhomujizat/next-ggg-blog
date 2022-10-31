@@ -38,7 +38,6 @@ function Login() {
   const handleSubmit = async () => {
     await setLoading(true);
     const respon = await serviceLogin({ email, password });
-    console.log("respon login", respon);
     if (respon?.error) {
       await setLoading(false);
       return toast({

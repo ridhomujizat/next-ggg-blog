@@ -35,7 +35,6 @@ function Register() {
       password: password,
       image_url: "",
     });
-    console.log("responsee", response);
     if (response?.error) {
       return toast({
         position: "bottom-right",

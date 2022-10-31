@@ -37,7 +37,6 @@ export default function User() {
     initialValues: initialValue,
     onSubmit: async (value) => {
       setLoading(true);
-      return console.log(value)
       const respon = await updateLabels({ id, data: value });
       if (!respon?.error) {
         route.push("/admin/labels");

@@ -33,7 +33,6 @@ export default function Blog(props) {
 
   useEffect(() => {
     setContent(state);
-    console.log(state);
   }, []);
 
   return (
