@@ -39,6 +39,9 @@ const BlogStyled = styled(Box)`
   a {
     color: #40d1d6;
   }
+  p {
+    text-align: justify !important;
+  }
 `;
 
 export default function Blog(props) {

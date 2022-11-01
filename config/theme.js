@@ -21,7 +21,7 @@ import {
   const styles = {
     global: (props) => ({
       body: {
-        color: mode("gray.800", "whiteAlpha.900")(props),
+        color: mode("whiteAlpha.900", "whiteAlpha.900")(props),
         bg: mode("#0C0E17", "#0C0E17")(props),
       },
     }),
