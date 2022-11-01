@@ -288,12 +288,12 @@ export default function Home(props) {
 }
 
 export async function getServerSideProps({ req, query }) {
-  let limit = 13;
+  let limit = 11;
   const page = query?.page ?? 1;
 
-  if (page > 1) {
-    limit = 10;
-  }
+  // if (page > 1) {
+  //   limit = 10;
+  // }
   // const stickyBlog = []
   // const BlogList = [];
   const { lang } = req.cookies;
