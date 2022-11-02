@@ -132,7 +132,7 @@ export default function Blog(props) {
               </Box>
             </Box>
             {/* HEADER */}
-            <Box my="20px">
+            <Box my="50px">
               <Image
                 src={blog.image_url}
                 alt={blog.title}
