@@ -17,6 +17,7 @@ export default function Thumbnail({ title, date, imageUrl, slug, height }) {
             border="0.861546px solid #FFFFFF"
             borderRadius={20}
             objectFit="cover"
+            objectPosition="right top"
           ></Box>
           <Spacer h={5} />
           <Text fontSize="xl" fontWeight="700">

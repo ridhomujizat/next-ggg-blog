@@ -254,7 +254,7 @@ export default function Home(props) {
                     title={val.title}
                     date={moment(val.date).format("DD MMM YYYY")}
                     imageUrl={val.image_url}
-                    height={["200px", "205px", "350px", "190px"]}
+                    height={["200px", "205px", "350px", "200px"]}
                   />
                 </GridItem>
               ))}
