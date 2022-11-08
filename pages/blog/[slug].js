@@ -140,7 +140,7 @@ export default function Blog(props) {
                 maxH="500px"
                 width="100%"
                 objectFit="cover"
-                objectPosition="center"
+                objectPosition="right top"
               />
             </Box>
             {/* CONTENT */}
