@@ -42,8 +42,9 @@ export const getBlogs = async ({
   }
 
   if (offset && offset !== 0) {
-    offset = { ...params, offset };
+    params = { ...params, offset };
   }
+
   return callAPI({
     url,
     method: "GET",

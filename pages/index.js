@@ -294,7 +294,7 @@ export async function getServerSideProps({ req, query }) {
 
   if (Number(page) > 1) {
     limit = 12;
-    offset = limit * (Number(page) - 1) - 1;
+    offset = limit * (Number(page) - 1) - 2;
   }
 
   const { lang } = req.cookies;
@@ -308,7 +308,6 @@ export async function getServerSideProps({ req, query }) {
     page,
     offset,
   };
-  console.log(params);
   const respon = await getBlogs(params);
   const responseCat = await getCategorys({
     type: initialLang.currentLang,
@@ -322,7 +321,6 @@ export async function getServerSideProps({ req, query }) {
   if (page == 1) {
     totalData -= 2;
   }
-  console.log("totalla", totalData);
 
   return {
     props: {
