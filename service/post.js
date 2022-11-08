@@ -8,7 +8,8 @@ export const getBlogs = async ({
   label,
   category,
   search,
-  status
+  status,
+  offset,
 }) => {
   const url = `/api/${CURRENT_API}`;
   let params = {};
@@ -36,10 +37,13 @@ export const getBlogs = async ({
   if (search) {
     params = { ...params, search: search };
   }
-  if (status === 'draft') {
-    url = url + '/draft'
+  if (status === "draft") {
+    url = url + "/draft";
   }
 
+  if (offset && offset !== 0) {
+    offset = { ...params, offset };
+  }
   return callAPI({
     url,
     method: "GET",

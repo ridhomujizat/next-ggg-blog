@@ -289,22 +289,27 @@ export default function Home(props) {
 
 export async function getServerSideProps({ req, query }) {
   let limit = 11;
+  let offset = 0;
   const page = query?.page ?? 1;
 
-  // if (page > 1) {
-  //   limit = 10;
-  // }
-  // const stickyBlog = []
-  // const BlogList = [];
+  if (Number(page) > 1) {
+    limit = 12;
+    offset = limit * (Number(page) - 1) - 1;
+  }
+
   const { lang } = req.cookies;
 
   const initialLang = await generateLang(lang);
-  const respon = await getBlogs({
+
+  const params = {
     type: initialLang.currentLang,
     ...query,
     limit,
     page,
-  });
+    offset,
+  };
+  console.log(params);
+  const respon = await getBlogs(params);
   const responseCat = await getCategorys({
     type: initialLang.currentLang,
   });
@@ -312,7 +317,13 @@ export async function getServerSideProps({ req, query }) {
     type: initialLang.currentLang,
   });
 
-  const { blogs, total_data } = respon.data;
+  let { blogs, total_data } = respon.data;
+  let totalData =  Number(total_data);
+  if (page == 1) {
+    totalData -= 2;
+  }
+  console.log("totalla", totalData);
+
   return {
     props: {
       ...initialLang,
@@ -323,7 +334,7 @@ export async function getServerSideProps({ req, query }) {
       },
       // stickyBlog,
       BlogList: blogs,
-      totalData: total_data,
+      totalData: totalData,
       categories: responseCat.data,
       labels: responseLabel.data,
     },
