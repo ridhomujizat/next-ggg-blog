@@ -39,7 +39,7 @@ export default function Blog(props) {
     <div>
       <Head>
         <title>Priview blog</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/logo64.png" />
       </Head>
       <PageLayouts currentLang={props.currentLang} text={props.text}>
         <Tabs size="md" variant="enclosed" color="white">

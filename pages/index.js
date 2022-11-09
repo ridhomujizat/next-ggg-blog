@@ -86,7 +86,7 @@ export default function Home(props) {
       <Head>
         <title>Blog | GGG</title>
         <meta name="description" content={props.text.home.desc} />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/logo64.png" />
       </Head>
       <PageLayouts currentLang={props.currentLang} text={props.text}>
         <Stack>

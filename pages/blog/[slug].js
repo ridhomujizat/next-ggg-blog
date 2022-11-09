@@ -77,7 +77,7 @@ export default function Blog(props) {
       <Head>
         <title> {blog.title}</title>
         <meta name="description" content={blog.meta_description} />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/logo64.png" />
       </Head>
       <PageLayouts currentLang={props.currentLang} text={props.text}>
         <Box display="flex" justifyContent="center" width="100%">

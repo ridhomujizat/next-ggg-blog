@@ -33,7 +33,7 @@ class MyDocument extends Document {
             href="/favicon-16x16.png"
           />
           <link rel="manifest" href="/site.webmanifest" />
-          <link rel="icon" href="/favicon.ico" />
+          <link rel="icon" href="/logo64.png" />
         </Head>
         <body>
           <Main />

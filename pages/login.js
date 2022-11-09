@@ -59,7 +59,7 @@ function Login() {
       <Head>
         <title>Login | GGG</title>
         <meta name="description" content="login GGG blog" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/logo64.png" />
       </Head>
       <Box background={"#0C0E17"}>
         <Flex

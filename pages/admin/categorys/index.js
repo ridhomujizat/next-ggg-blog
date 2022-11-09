@@ -122,7 +122,7 @@ export default function Post(props) {
       <Head>
         <title>Category | GGG</title>
         <meta name="description" content={props.text.home.desc} />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/logo64.png" />
       </Head>
       <AdminLayout currentLang={props.currentLang} text={props.text}>
         <Stack spacing={4}>
