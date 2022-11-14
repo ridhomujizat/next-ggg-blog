@@ -22,6 +22,15 @@ const BlogStyled = styled(Box)`
   a {
     color: #40d1d6;
   }
+  p {
+    text-align: justify !important;
+  }
+  figure {
+    max-height: unset !important;
+  }
+  img {
+    max-height: unset !important;
+  }
 `;
 
 export default function Blog(props) {
