@@ -35,7 +35,7 @@ export const updateProfile = async ({id, data}) => {
 
   return callAPI({
     url,
-    method: "POST",
+    method: "PUT",
     data,
     token: true
   });

@@ -186,6 +186,11 @@ export default function Form(props) {
   };
 
   useEffect(() => {
+    setAuth(stateAuth.user);
+    formik.setFieldValue("author",stateAuth.user.username)
+  }, []);
+
+  useEffect(() => {
     getPostDetails();
     getAdditionalData();
   }, []);
