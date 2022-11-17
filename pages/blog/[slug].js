@@ -108,7 +108,7 @@ export default function Blog(props) {
                 Back
               </Button>
             </Box>
-            {/* ARTICLE INFO  */}
+            {/* ARTICLE INFO-  */}
             <Box display="flex" my="10px" gap="20px" alignItems="center">
               <Box>
                 <Text fontSize="md" fontWeight="bold">
