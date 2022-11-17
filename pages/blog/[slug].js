@@ -124,7 +124,7 @@ export default function Blog(props) {
                   Author
                 </Text>
                 <Text color="gray.700" fontSize="sm">
-                  {blog.author}
+                  {blog?.author_detail?.fullname}
                 </Text>
               </Box>
               <Box height="40px" borderRight="#fff solid 1px" />
