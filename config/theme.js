@@ -23,6 +23,14 @@ import {
       body: {
         color: mode("whiteAlpha.900", "whiteAlpha.900")(props),
         bg: mode("#0C0E17", "#0C0E17")(props),
+        ol: {
+          margin: 'revert',
+          padding: 'revert'
+        },
+        ul: {
+          margin: 'revert',
+          padding: 'revert'
+        }
       },
     }),
   };

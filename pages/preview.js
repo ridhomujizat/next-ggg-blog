@@ -40,6 +40,15 @@ export default function Blog(props) {
   const [type, setType] = useState("en");
   const router = useRouter();
 
+  const isJson = (e) => {
+    try {
+      const data = JSON.parse(e);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
   useEffect(() => {
     setContent(state);
   }, []);
@@ -111,9 +120,15 @@ export default function Blog(props) {
                   />
                 </Box>
                 {/* CONTENT */}
-                <BlogStyled>
-                  <Output data={JSON.parse(state[0][`content_${type}`])} />
-                </BlogStyled>
+                {isJson(state[0][`content_${type}`]) ? (
+                  <BlogStyled>
+                    <Output data={JSON.parse(state[0][`content_${type}`])} />
+                  </BlogStyled>
+                ) : (
+                  <div
+                    dangerouslySetInnerHTML={{ __html: state[0][`content_${type}`] }}
+                  />
+                )}
               </Box>
             </>
           ) : (
