@@ -52,7 +52,7 @@ const LinkItems = [
   {
     name: "User Management",
     icon: FiCompass,
-    link: "/admin/user",
+    link: "/admin/users",
     privilege: ["SuperAdmin"],
   },
   // { name: "Settings", icon: FiSettings, link: "setting" },

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import AdminLayout from "layout/AdminLayout";
@@ -31,7 +31,7 @@ import previewStore from "store/previewStore";
 import jwtDecode from "jwt-decode";
 import { BsEye } from "react-icons/bs";
 
-const CustomEditor = dynamic(() => import("components/RichEditor/Jodit"), {
+const CustomEditor = dynamic(() => import("components/RichEditor"), {
   ssr: false,
 });
 
@@ -47,8 +47,6 @@ export default function Form(props) {
   const [type, setType] = useState("en");
   const [auth, setAuth] = useState(null);
   const [loading, setLoading] = useState(false);
-
-
   useEffect(() => {
     setAuth(stateAuth.user);
     formik.setFieldValue("author",stateAuth.user.username)

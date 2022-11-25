@@ -56,6 +56,15 @@ export default function Blog(props) {
   const [page, setPage] = useState(1);
   const [listData, setListData] = useState({ blogs: [], total_data: 0 });
 
+  const isJson = (e) => {
+    try {
+      const data = JSON.parse(e);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
   const handleToBlog = (value) => {
     router.push({
       pathname: "/",
@@ -150,9 +159,17 @@ export default function Blog(props) {
               />
             </Box>
             {/* CONTENT */}
-            <BlogStyled>
-              <Output data={JSON.parse(blog.content)} />
-            </BlogStyled>
+            {isJson(blog.content) ? (
+              <BlogStyled>
+                <Output data={JSON.parse(blog.content)} />
+              </BlogStyled>
+            ) : (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: blog.content,
+                }}
+              />
+            )}
             {/* <Box my="20px">
               <Text mb="10px" fontWeight="bold" fontSize="15px">
                 Category
@@ -268,7 +285,9 @@ export async function getServerSideProps({ req, params }) {
     };
   }
 
-  const readTime = readingTime(respon.data?.content ?? "", { wordsPerMinute: 500 });
+  const readTime = readingTime(respon.data?.content ?? "", {
+    wordsPerMinute: 500,
+  });
 
   return {
     props: {

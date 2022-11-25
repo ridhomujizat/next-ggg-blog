@@ -124,12 +124,28 @@ export const updateBlog = async ({ id, data }) => {
 export const uploadImageBlog = async (data) => {
   const url = `/api/images/${CURRENT_API}/upload`;
 
-  return callAPI({
+  const respon = await callAPI({
     url,
     method: "POST",
     data,
     token: true,
   });
+
+  let image_url 
+  const split = respon.image_url.split("//")
+
+  if(split.length === 3){
+    image_url = split[0]+ "//" +  split[1] + "/" +  split[2]
+  } else {
+    image_url =  respon.image_url
+  }
+
+  console.log(image_url)
+  return {
+    ...respon,
+    image_url
+  }
+
 };
 
 export const deleteImageBlog = async (data) => {

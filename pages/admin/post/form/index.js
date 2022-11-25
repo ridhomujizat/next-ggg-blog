@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import AdminLayout from "layout/AdminLayout";
@@ -30,8 +30,9 @@ import useAuthStore from "store/authStore";
 import previewStore from "store/previewStore";
 import jwtDecode from "jwt-decode";
 import { BsEye } from "react-icons/bs";
+import uploadImageToHtml from 'utils/base64toUrlImage'
 
-const CustomEditor = dynamic(() => import("components/RichEditor"), {
+const CustomEditor = dynamic(() => import("components/RichEditor/Jodit"), {
   ssr: false,
 });
 
@@ -47,6 +48,8 @@ export default function Form(props) {
   const [type, setType] = useState("en");
   const [auth, setAuth] = useState(null);
   const [loading, setLoading] = useState(false);
+
+
   useEffect(() => {
     setAuth(stateAuth.user);
     formik.setFieldValue("author",stateAuth.user.username)
@@ -57,9 +60,9 @@ export default function Form(props) {
     const responseCat = await getCategorys({
       type: props.currentLang,
     });
-    const responseLabel = await getLabels({
-      type: props.currentLang,
-    });
+    // const responseLabel = await getLabels({
+    //   type: props.currentLang,
+    // });
     if (responseCat.data.length > 0) {
       setCategorys(
         responseCat.data?.map((val) => ({
@@ -68,15 +71,16 @@ export default function Form(props) {
         }))
       );
     }
-    if (responseLabel.data.length > 0) {
-      setLabels(
-        responseLabel.data?.map((val) => ({
-          value: val.id,
-          label: val.label_name,
-        }))
-      );
-    }
+    // if (responseLabel.data.length > 0) {
+    //   setLabels(
+    //     responseLabel.data?.map((val) => ({
+    //       value: val.id,
+    //       label: val.label_name,
+    //     }))
+    //   );
+    // }
   };
+
   const toast = useToast();
   const route = useRouter();
   const formik = useFormik({
@@ -107,7 +111,7 @@ export default function Form(props) {
         .map((val) => val.value)
         .join(",");
       const valueCategory = value.category_id[0].value;
-
+ 
       const { image, ...payload } = value;
 
       const data = {
@@ -116,8 +120,6 @@ export default function Form(props) {
         array_id_labels: '2,1',
         date: moment().format("YYYY-MM-DD HH:mm:ss"),
       };
-
-      // return console.log(data);
 
       if (data.status === "preview") {
         preview.setNew(data);
@@ -160,10 +162,12 @@ export default function Form(props) {
     }),
   });
 
-  const postImage = async (val) => {
+
+  const postImage = async (val, fname) => {
     const f = new FormData();
-    f.append("photo", val[0]);
+    f.append("photo", val[0], fname);
     const responImage = await uploadImageBlog(f);
+    console.log(responImage)
 
     if (!responImage?.error) {
       formik.setFieldValue("image_url", responImage.image_url);

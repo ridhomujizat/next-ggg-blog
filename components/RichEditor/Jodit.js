@@ -3,7 +3,8 @@ import styled from "@emotion/styled";
 import JoditEditor from "jodit-react";
 import { Box } from "@chakra-ui/react";
 import "jodit/build/jodit.min.css";
-
+import uploadImageToHtml from "utils/base64toUrlImage";
+import { CloudImage } from "./UploadImage/uploadImageJodit";
 const BlogStyled = styled(Box)`
   .jodit-ui-form {
     color: #000;
@@ -34,7 +35,17 @@ const Jodit = ({ content, setContent }) => {
     //   "image",
     //   "video",
     // ],
-    uploader: { insertImageAsBase64URI: true },
+    uploader: {
+      insertImageAsBase64URI: true,
+      defaultHandlerSuccess: async (res) => {
+        const imageUrl = await CloudImage(res.files[0])
+        console.log(imageUrl);
+
+        editor.current.component.selection.insertImage(
+          imageUrl
+        );
+      },
+    },
     removeButtons: ["brush", "file"],
     showXPathInStatusbar: false,
     showCharsCounter: false,
@@ -43,6 +54,11 @@ const Jodit = ({ content, setContent }) => {
     height: 400,
   };
 
+  const onChange = async (html) => {
+    const content = await uploadImageToHtml(html);
+    console.log();
+    setContent(content);
+  };
   return (
     <BlogStyled sx={{ ".jodit-ui-form": { color: "#000" } }}>
       <JoditEditor
@@ -51,8 +67,7 @@ const Jodit = ({ content, setContent }) => {
         config={config}
         tabIndex={1} // tabIndex of textarea
         onBlur={(newContent) => {
-          setContent(newContent);
-          console.log(newContent);
+          onChange(newContent);
         }} // preferred to use only this option to update the content for performance reasons
         onChange={(newContent) => {}}
       />

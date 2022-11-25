@@ -32,7 +32,7 @@ import jwtDecode from "jwt-decode";
 import { BsEye } from "react-icons/bs";
 
 
-const CustomEditor = dynamic(() => import("components/RichEditor"), {
+const CustomEditor = dynamic(() => import("components/RichEditor/Jodit"), {
   ssr: false,
 });
 
