@@ -31,7 +31,6 @@ import previewStore from "store/previewStore";
 import jwtDecode from "jwt-decode";
 import { BsEye } from "react-icons/bs";
 
-
 const CustomEditor = dynamic(() => import("components/RichEditor/Jodit"), {
   ssr: false,
 });
@@ -86,7 +85,7 @@ export default function Form(props) {
       const data = {
         ...value,
         category_id: valueCategory,
-        array_id_labels: '2',
+        array_id_labels: "2",
         date: moment().format("YYYY-MM-DD HH:mm:ss"),
       };
 
@@ -127,10 +126,10 @@ export default function Form(props) {
     },
     validationSchema: yup.object({
       image_url: yup.mixed().required("Image is required"),
-      content_idn: yup.string().required("Content en is required"),
-      content_en: yup.string().required("Content idn is required"),
-      title_idn: yup.string().required("Title idn is required"),
-      title_en: yup.string().required("Title idn is required"),
+      content_idn: yup.string().required("Content IDN is required"),
+      content_en: yup.string().required("Content EN is required"),
+      title_idn: yup.string().required("Title IDN is required"),
+      title_en: yup.string().required("Title EN is required"),
       category_id: yup.mixed().required("Category is required"),
     }),
     enableReinitialize: true,
@@ -187,7 +186,7 @@ export default function Form(props) {
 
   useEffect(() => {
     setAuth(stateAuth.user);
-    formik.setFieldValue("author",stateAuth.user.username)
+    formik.setFieldValue("author", stateAuth.user.username);
   }, []);
 
   useEffect(() => {
@@ -199,13 +198,32 @@ export default function Form(props) {
     setAuth(stateAuth.user);
   }, []);
 
+  const checkError = () => {
+    const errorList = Object.values(formik.errors);
+    if (errorList.length > 0) {
+      errorList.forEach((val) => {
+        toast({
+          position: "top-right",
+          title: val,
+          // description: val,
+          status: "warning",
+          duration: 2000,
+          isClosable: true,
+        });
+      });
+    }
+  };
+
   const postImage = async (val) => {
     const f = new FormData();
     f.append("photo", val[0]);
     const responImage = await uploadImageBlog(f);
 
     if (!responImage?.error) {
-      formik.setFieldValue("image_url", responImage.image_url);
+      formik.setFieldValue(
+        "image_url",
+        `${responImage.image_url}?date=${Date.now()}`
+      );
     } else {
       return toast({
         position: "bottom-right",
@@ -235,15 +253,18 @@ export default function Form(props) {
           </TabList>
           {/* IMAGE INPUT  */}
           <Flex justifyContent="center" p="4" gap="4" alignItems="center">
-            <Image
+            <img
               src={
                 formik.values?.image_url
-                  ? formik.values?.image_url
+                  ? `${formik.values?.image_url}`
                   : "/image/img_empty.png"
               }
-              maxH="200px"
-              alt="image-category"
+              alt="image"
               maxW="50%"
+              style={{
+                maxWidth: "50%",
+                maxHeight: "200px",
+              }}
             />
             <Input
               accept="image/* "
@@ -281,7 +302,6 @@ export default function Form(props) {
                 name="colors"
                 options={categorys}
                 placeholder="Select category..."
-                closeMenuOnSelect={false}
                 value={formik.values.category_id}
                 onChange={(e) => {
                   formik.setFieldValue("category_id", e);
@@ -405,6 +425,7 @@ export default function Form(props) {
             disabled={!formik.isValid}
             leftIcon={<BsEye />}
             onClick={() => {
+              checkError();
               formik.setFieldValue("status", "preview");
               formik.handleSubmit();
             }}
@@ -416,6 +437,7 @@ export default function Form(props) {
             disabled={!formik.isValid}
             colorScheme="yellow"
             onClick={() => {
+              checkError();
               formik.setFieldValue("status", "draft");
               formik.handleSubmit();
             }}
@@ -427,6 +449,7 @@ export default function Form(props) {
             disabled={!formik.isValid}
             colorScheme="green"
             onClick={() => {
+              checkError();
               formik.setFieldValue("status", "true");
               formik.handleSubmit();
             }}

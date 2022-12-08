@@ -30,7 +30,7 @@ import useAuthStore from "store/authStore";
 import previewStore from "store/previewStore";
 import jwtDecode from "jwt-decode";
 import { BsEye } from "react-icons/bs";
-import uploadImageToHtml from 'utils/base64toUrlImage'
+import uploadImageToHtml from "utils/base64toUrlImage";
 
 const CustomEditor = dynamic(() => import("components/RichEditor/Jodit"), {
   ssr: false,
@@ -49,10 +49,9 @@ export default function Form(props) {
   const [auth, setAuth] = useState(null);
   const [loading, setLoading] = useState(false);
 
-
   useEffect(() => {
     setAuth(stateAuth.user);
-    formik.setFieldValue("author",stateAuth.user.username)
+    formik.setFieldValue("author", stateAuth.user.username);
     getAdditionalData();
   }, []);
 
@@ -111,13 +110,13 @@ export default function Form(props) {
         .map((val) => val.value)
         .join(",");
       const valueCategory = value.category_id[0].value;
- 
+
       const { image, ...payload } = value;
 
       const data = {
         ...payload,
         category_id: valueCategory,
-        array_id_labels: '2,1',
+        array_id_labels: "2,1",
         date: moment().format("YYYY-MM-DD HH:mm:ss"),
       };
 
@@ -154,23 +153,41 @@ export default function Form(props) {
     },
     validationSchema: yup.object({
       image_url: yup.mixed().required("Image is required"),
-      content_idn: yup.string().required("Content en is required"),
-      content_en: yup.string().required("Content idn is required"),
-      title_idn: yup.string().required("Title idn is required"),
-      title_en: yup.string().required("Title idn is required"),
+      content_idn: yup.string().required("Content IDN is required"),
+      content_en: yup.string().required("Content EN is required"),
+      title_idn: yup.string().required("Title IDN is required"),
+      title_en: yup.string().required("Title EN is required"),
       category_id: yup.mixed().required("Category is required"),
     }),
   });
 
+  const checkError = () => {
+    const errorList = Object.values(formik.errors);
+    if (errorList.length > 0) {
+      errorList.forEach((val) => {
+        toast({
+          position: "top-right",
+          title: val,
+          // description: val,
+          status: "warning",
+          duration: 2000,
+          isClosable: true,
+        });
+      });
+    }
+  };
 
   const postImage = async (val, fname) => {
     const f = new FormData();
     f.append("photo", val[0], fname);
     const responImage = await uploadImageBlog(f);
-    console.log(responImage)
+    console.log(responImage);
 
     if (!responImage?.error) {
-      formik.setFieldValue("image_url", responImage.image_url);
+      formik.setFieldValue(
+        "image_url",
+        `${responImage.image_url}?date=${Date.now()}`
+      );
     } else {
       return toast({
         position: "bottom-right",
@@ -200,15 +217,18 @@ export default function Form(props) {
           </TabList>
           {/* IMAGE INPUT  */}
           <Flex justifyContent="center" p="4" gap="4" alignItems="center">
-            <Image
+            <img
               src={
                 formik.values?.image_url
-                  ? formik.values?.image_url
+                  ? `${formik.values?.image_url}`
                   : "/image/img_empty.png"
               }
-              maxH="200px"
               alt="image"
               maxW="50%"
+              style={{
+                maxWidth: '50%',
+                maxHeight: '200px'
+              }}
             />
             <Input
               accept="image/* "
@@ -246,7 +266,6 @@ export default function Form(props) {
                 name="colors"
                 options={categorys}
                 placeholder="Select category..."
-                closeMenuOnSelect={false}
                 value={formik.values.category_id}
                 onChange={(e) => {
                   formik.setFieldValue("category_id", [e]);
@@ -362,10 +381,9 @@ export default function Form(props) {
 
         <Flex justifyContent="flex-end" p="4" gap="15px">
           <Button
-            type="submit"
-            disabled={!formik.isValid}
             leftIcon={<BsEye />}
             onClick={() => {
+              checkError();
               formik.setFieldValue("status", "preview");
               formik.handleSubmit();
             }}
@@ -373,10 +391,9 @@ export default function Form(props) {
             preview
           </Button>
           <Button
-            type="submit"
-            disabled={!formik.isValid}
             colorScheme="yellow"
             onClick={() => {
+              checkError();
               formik.setFieldValue("status", "draft");
               formik.handleSubmit();
             }}
@@ -384,10 +401,9 @@ export default function Form(props) {
             draft
           </Button>
           <Button
-            type="submit"
-            disabled={!formik.isValid}
             colorScheme="green"
             onClick={() => {
+              checkError();
               formik.setFieldValue("status", "true");
               formik.handleSubmit();
             }}

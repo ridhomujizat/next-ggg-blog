@@ -14,56 +14,58 @@ const BlogStyled = styled(Box)`
 const Jodit = ({ content, setContent }) => {
   const editor = useRef(null);
   // const [content, setContent] = useState("");
-
-  const config = {
-    // buttons: [
-    //   "bold",
-    //   "italic",
-    //   "underline",
-    //   "|",
-    //   "ol",
-    //   "ul",
-    //   "|",
-    //   "fontsize",
-    //   "|",
-    //   "left",
-    //   "center",
-    //   "right",
-    //   "justify",
-    //   "|",
-    //   "table",
-    //   "image",
-    //   "video",
-    // ],
-    uploader: {
-      insertImageAsBase64URI: true,
-      defaultHandlerSuccess: async (res) => {
-        const imageUrl = await CloudImage(res.files[0]);
-        editor.current.component.selection.insertImage(imageUrl);
+  const config = useMemo(
+    () => ( {
+      // buttons: [
+      //   "bold",
+      //   "italic",
+      //   "underline",
+      //   "|",
+      //   "ol",
+      //   "ul",
+      //   "|",
+      //   "fontsize",
+      //   "|",
+      //   "left",
+      //   "center",
+      //   "right",
+      //   "justify",
+      //   "|",
+      //   "table",
+      //   "image",
+      //   "video",
+      // ],
+      uploader: {
+        insertImageAsBase64URI: true,
+        defaultHandlerSuccess: async (res) => {
+          const imageUrl = await CloudImage(res.files[0]);
+          editor.current.component.selection.insertImage(imageUrl);
+        },
       },
-    },
-    removeButtons: ["brush", "file"],
-    showXPathInStatusbar: false,
-    showCharsCounter: false,
-    showWordsCounter: false,
-    toolbarAdaptive: false,
-    height: 400,
-    hotkeys: {
-      redo: "ctrl+z",
-      undo: "ctrl+y,ctrl+shift+z",
-      indent: "ctrl+]",
-      outdent: "ctrl+[",
-      bold: "ctrl+b",
-      italic: "ctrl+i",
-      removeFormat: "ctrl+shift+m",
-      insertOrderedList: "ctrl+shift+7",
-      insertUnorderedList: "ctrl+shift+8",
-      openSearchDialog: "ctrl+f",
-      openReplaceDialog: "ctrl+r",
-    },
-    askBeforePasteFromWord: false,
-    askBeforePasteHTML: false,
-  };
+      removeButtons: ["brush", "file"],
+      showXPathInStatusbar: false,
+      showCharsCounter: false,
+      showWordsCounter: false,
+      toolbarAdaptive: false,
+      height: 400,
+      hotkeys: {
+        redo: "ctrl+z",
+        undo: "ctrl+y,ctrl+shift+z",
+        indent: "ctrl+]",
+        outdent: "ctrl+[",
+        bold: "ctrl+b",
+        italic: "ctrl+i",
+        removeFormat: "ctrl+shift+m",
+        insertOrderedList: "ctrl+shift+7",
+        insertUnorderedList: "ctrl+shift+8",
+        openSearchDialog: "ctrl+f",
+        openReplaceDialog: "ctrl+r",
+      },
+      askBeforePasteFromWord: false,
+      askBeforePasteHTML: false,
+    }),
+    []
+);
 
   const onChange = async (html) => {
     const content = await uploadImageToHtml(html);
@@ -76,15 +78,11 @@ const Jodit = ({ content, setContent }) => {
         ref={editor}
         value={content}
         config={config}
-        tabIndex={1} // tabIndex of textarea
+        tabIndex={1} 
         onBlur={(newContent) => {
-          console.log(content, editor.current.value);
-          if (content !== newContent) {
-            console.log("ini beda ni");
             onChange(newContent);
-          }
-        }} // preferred to use only this option to update the content for performance reasons
-        onChange={(newContent) => {}}
+        }}
+
       />
     </BlogStyled>
   );

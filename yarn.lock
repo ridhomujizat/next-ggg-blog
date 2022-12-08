@@ -2812,7 +2812,7 @@ jodit-react@^1.3.27:
     "@typescript-eslint/parser" "^5.36.2"
     jodit "^3.20.2"
 
-jodit@^3.20.2:
+jodit@^3.20.2, jodit@^3.23.3:
   version "3.23.3"
   resolved "https://registry.yarnpkg.com/jodit/-/jodit-3.23.3.tgz#36666707b41b12f6d5e448ceb0cbb6f5b7a35f33"
   integrity sha512-lzKh4spzJy5pxRV8a/sy1ZWIvtoDHYrWkRq7b+aXNHH+5YXM/zwmtIaZOOY+n7LEsl4mrVlLXpd1iAT766rR0w==
