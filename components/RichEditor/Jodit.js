@@ -38,12 +38,10 @@ const Jodit = ({ content, setContent }) => {
     uploader: {
       insertImageAsBase64URI: true,
       defaultHandlerSuccess: async (res) => {
-        const imageUrl = await CloudImage(res.files[0])
+        const imageUrl = await CloudImage(res.files[0]);
         console.log(imageUrl);
 
-        editor.current.component.selection.insertImage(
-          imageUrl
-        );
+        editor.current.component.selection.insertImage(imageUrl);
       },
     },
     removeButtons: ["brush", "file"],
@@ -52,6 +50,21 @@ const Jodit = ({ content, setContent }) => {
     showWordsCounter: false,
     toolbarAdaptive: false,
     height: 400,
+    hotkeys: {
+      redo: "ctrl+z",
+      undo: "ctrl+y,ctrl+shift+z",
+      indent: "ctrl+]",
+      outdent: "ctrl+[",
+      bold: "ctrl+b",
+      italic: "ctrl+i",
+      removeFormat: "ctrl+shift+m",
+      insertOrderedList: "ctrl+shift+7",
+      insertUnorderedList: "ctrl+shift+8",
+      openSearchDialog: "ctrl+f",
+      openReplaceDialog: "ctrl+r",
+    },
+    askBeforePasteFromWord: false,
+    askBeforePasteHTML: false,
   };
 
   const onChange = async (html) => {
@@ -67,7 +80,9 @@ const Jodit = ({ content, setContent }) => {
         config={config}
         tabIndex={1} // tabIndex of textarea
         onBlur={(newContent) => {
-          onChange(newContent);
+          if(content !== content){
+            onChange(newContent);
+          }
         }} // preferred to use only this option to update the content for performance reasons
         onChange={(newContent) => {}}
       />
