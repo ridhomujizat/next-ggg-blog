@@ -92,6 +92,16 @@ export default function Blog(props) {
       <Head>
         <title> {blog.title}</title>
         <meta name="description" content={blog.meta_description} />
+        <meta
+          property="og:image"
+          content={blog.image_url}
+        />
+
+        <meta property="og:title" content={blog.title} />
+        <meta
+          property="og:description"
+          content={blog.meta_description}
+        />
         <link rel="icon" href="/logo64.png" />
       </Head>
       <PageLayouts currentLang={props.currentLang} text={props.text}>
