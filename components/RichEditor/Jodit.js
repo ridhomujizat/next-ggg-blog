@@ -39,8 +39,6 @@ const Jodit = ({ content, setContent }) => {
       insertImageAsBase64URI: true,
       defaultHandlerSuccess: async (res) => {
         const imageUrl = await CloudImage(res.files[0]);
-        console.log(imageUrl);
-
         editor.current.component.selection.insertImage(imageUrl);
       },
     },
@@ -80,7 +78,9 @@ const Jodit = ({ content, setContent }) => {
         config={config}
         tabIndex={1} // tabIndex of textarea
         onBlur={(newContent) => {
-          if(content !== content){
+          console.log(content, editor.current.value);
+          if (content !== newContent) {
+            console.log("ini beda ni");
             onChange(newContent);
           }
         }} // preferred to use only this option to update the content for performance reasons
