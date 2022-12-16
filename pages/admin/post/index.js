@@ -102,6 +102,7 @@ export default function Post(props) {
       id: "title",
       label: "Title",
       align: "left",
+      format: (val) => <Box maxWidth="500px" whiteSpace="pre-wrap">{val.title}</Box>,
     },
     {
       id: "status",

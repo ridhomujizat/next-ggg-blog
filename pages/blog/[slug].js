@@ -286,6 +286,7 @@ export async function getServerSideProps({ req, params }) {
     type: initialLang.currentLang,
   });
 
+  console.log(respon)
   if (respon?.error) {
     return {
       redirect: {

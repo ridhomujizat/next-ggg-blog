@@ -103,8 +103,13 @@ export default function Form(props) {
     },
     onSubmit: async (value) => {
       setLoading(true);
-      value.slug_en = value.title_en.split(" ").join("-").replaceAll("#", "");
-      value.slug_idn = value.title_en.split(" ").join("-").replaceAll("#", "");
+      
+      value.slug_en =
+        new Date().getTime() +"-"+
+        value.title_en.split(" ").join("-").replaceAll("#", "");
+      value.slug_idn =
+        new Date().getTime() +"-"+
+        value.title_en.split(" ").join("-").replaceAll("#", "");
 
       const valueLabels = value.array_id_labels
         .map((val) => val.value)
@@ -226,8 +231,8 @@ export default function Form(props) {
               alt="image"
               maxW="50%"
               style={{
-                maxWidth: '50%',
-                maxHeight: '200px'
+                maxWidth: "50%",
+                maxHeight: "200px",
               }}
             />
             <Input

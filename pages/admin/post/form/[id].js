@@ -73,8 +73,8 @@ export default function Form(props) {
     initialValues: initialValue,
     onSubmit: async (value) => {
       setLoading(true);
-      value.slug_en = value.title_en.split(" ").join("-").replaceAll("#", "");
-      value.slug_idn = value.title_en.split(" ").join("-").replaceAll("#", "");
+      value.slug_en = new Date().getTime()+"-"+value.title_en.split(" ").join("-").replaceAll("#", "");
+      value.slug_idn = new Date().getTime()+"-"+value.title_en.split(" ").join("-").replaceAll("#", "");
 
       //category & value
       const valueLabels = value.array_id_labels

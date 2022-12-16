@@ -12,7 +12,7 @@ import {
 export default function TableComp({ headCell, data }) {
   return (
     <TableContainer background="#646364">
-      <Table>
+      <Table sx={{overflow: 'auto'}}>
         <Thead>
           <Tr bgColor="blue.900">
             {headCell.map((v) => (

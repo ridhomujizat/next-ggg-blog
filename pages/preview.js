@@ -126,7 +126,9 @@ export default function Blog(props) {
                   </BlogStyled>
                 ) : (
                   <div
-                    dangerouslySetInnerHTML={{ __html: state[0][`content_${type}`] }}
+                    dangerouslySetInnerHTML={{
+                      __html: state[0][`content_${type}`],
+                    }}
                   />
                 )}
               </Box>
