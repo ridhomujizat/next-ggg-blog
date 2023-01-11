@@ -20,7 +20,7 @@ export default function Thumbnail({ title, date, imageUrl, slug, height }) {
             objectPosition="right top"
           ></Box>
           <Spacer h={5} />
-          <Text
+          <Text noOfLines={2}
             fontSize="xl"
             fontWeight="700"
             textOverflow="ellipsis"
