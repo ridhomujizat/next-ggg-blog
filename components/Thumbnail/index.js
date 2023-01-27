@@ -25,6 +25,13 @@ export default function Thumbnail({ title, date, imageUrl, slug, height }) {
             fontWeight="700"
             textOverflow="ellipsis"
             overflow="hidden"
+            sx={{
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              display: "-webkit-box",
+              "-webkit-line-clamp": "2",
+              " -webkit-box-orient": "vertical",
+            }}
           >
             {title}
           </Text>

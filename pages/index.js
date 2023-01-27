@@ -219,7 +219,17 @@ export default function Home(props) {
                       ></Box>
                       <Spacer h={10} />
 
-                      <Text fontSize="4xl" fontWeight="700">
+                      <Text
+                        fontSize="4xl"
+                        fontWeight="700"
+                        sx={{
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          display: "-webkit-box",
+                          "-webkit-line-clamp": "3",
+                          " -webkit-box-orient": "vertical",
+                        }}
+                      >
                         {val.title}
                       </Text>
                       <Text>{moment(val.date).format("DD MMM YYYY")}</Text>
@@ -317,7 +327,7 @@ export async function getServerSideProps({ req, query }) {
   });
 
   let { blogs, total_data } = respon.data;
-  let totalData =  Number(total_data);
+  let totalData = Number(total_data);
   if (page == 1) {
     totalData -= 2;
   }
