@@ -96,12 +96,12 @@ export default function Blog(props) {
 
         <meta property="og:title" content={blog.title} />
         <meta property="og:description" content={blog.meta_description} />
-        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content={"https://blog.goodgamesguild.com/"} />
         <meta name="twitter:title" content={blog.title} />
         <meta
           name="twitter:image"
-          content="https://pbs.twimg.com/profile_images/1334493324900700161/qUsiG1DS_mini.jpg"
+          content={blog.image_url}
         />
         <meta name="twitter:description" content={blog.meta_description}></meta>
         <link rel="icon" href="/logo64.png" />
